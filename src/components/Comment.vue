@@ -13,7 +13,7 @@
             <input ref="replyInput" v-model="replyMsg" placeholder="Reply to comment">
             <button @click="submitReply()">Submit</button><button @click="replyTextBox = null">Cancel </button>
         </div>
-        <p class="childCount" v-show="collapse && totalChildCount > 0">{{totalChildCount}} child comments</p>
+        <p class="childCount" v-show="collapse && totalChildCount > 0">{{totalChildCount}} child <span v-if="totalChildCount == 1">comment</span><span v-else>comments</span></p>
         <Comment v-show="!collapse" v-for="comment in children" :comment="comment" :key="comment.msg"></Comment>
         <!-- <hr class="divider"> -->
     </div>
@@ -34,7 +34,7 @@ import Comment from '@/components/Comment.vue'
             replyTextBox: null,
             replyMsg: "",
             collapse: false,
-            totalChildCount: 0
+            totalChildCount: 0,
         }),
         methods: {
             replyBtn () {
