@@ -1,18 +1,20 @@
 <template>
     <div class="commentBox">
         <div>
-            <i v-if="showChildren" @click="showChildren = false" title="Hide child comments" class="material-icons collapseBtn">remove</i>
-            <i v-else @click="showChildren = true" title="Show child comments" class="material-icons collapseBtn">add</i>
+            <i v-if="!collapse" @click="collapse = true" title="Hide child comments" class="material-icons collapseBtn">remove</i>
+            <i v-else @click="collapse = false" title="Show child comments" class="material-icons collapseBtn">add</i>
             <span class="user">{{comment.user}}</span>
         </div>
-        <p class="msg">{{comment.msg}}</p>
-        <i @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
+        <div v-show="!collapse" class="contents">
+            <p class="msg">{{comment.msg}}</p>
+            <i @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
+        </div>
         <div v-show="replyTextBox">
             <input ref="replyInput" v-model="replyMsg" placeholder="Reply to comment">
             <button @click="submitReply()">Submit</button><button @click="replyTextBox = null">Cancel </button>
         </div>
-        <p class="childCount" v-show="!showChildren && totalChildCount > 0">{{totalChildCount}} child comments</p>
-        <Comment v-show="showChildren" v-for="comment in children" :comment="comment" :key="comment.msg"></Comment>
+        <p class="childCount" v-show="collapse && totalChildCount > 0">{{totalChildCount}} child comments</p>
+        <Comment v-show="!collapse" v-for="comment in children" :comment="comment" :key="comment.msg"></Comment>
         <!-- <hr class="divider"> -->
     </div>
 </template>
@@ -31,7 +33,7 @@ import Comment from '@/components/Comment.vue'
             children: [],
             replyTextBox: null,
             replyMsg: "",
-            showChildren: true,
+            collapse: false,
             totalChildCount: 0
         }),
         methods: {
@@ -63,12 +65,10 @@ import Comment from '@/components/Comment.vue'
         },
         mounted () {
             this.children = this.$props.comment.children
-            this.totalChildCount = this.countChildComments(this.children)
         },
         watch: {
             children: {
                 handler: function () {
-                    console.log('a thing changed')
                     this.totalChildCount = this.countChildComments(this.children)
                 },
                 deep: true
