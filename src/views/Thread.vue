@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p class="sub">r/main</p>
+        <p class="sub">r/{{subName}}</p>
         <div class="divider"></div>
         <div class="header">
             <span class="voteArea">
@@ -33,6 +33,7 @@ export default {
         Comment
     },
     data: () => ({
+        subName: "main",
         title: "history of the world i guess",
         user: "currentUser",
         replyMsg: "",
