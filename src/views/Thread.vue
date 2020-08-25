@@ -8,7 +8,6 @@
         <textarea v-model="replyMsg" rows="3" placeholder="Reply to thread"></textarea>
         <br>
         <button @click="reply">Submit</button>
-        <!-- <hr class="divider"> -->
         <Comment v-for="comment in comments" :comment="comment" :key="comment.msg"></Comment>
     </div>
 </template>
