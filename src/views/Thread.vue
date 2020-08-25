@@ -26,14 +26,17 @@ import Comment from '@/components/Comment.vue'
                 {
                     user: "TestUser",
                     msg: "Yes",
+                    points: 5,
                     children: [
                         {
                             user: "UserTest",
                             msg: "No",
+                            points: 1,
                             children: [
                                 {
                                     user: "AnotherTest",
                                     msg: "wedfbiskd",
+                                    points: -1,
                                     children: []
                                 }
                             ]
@@ -41,6 +44,7 @@ import Comment from '@/components/Comment.vue'
                         {
                             user: "mm",
                             msg: "pp",
+                            points: 0,
                             children: []
                         }
                     ]
@@ -53,7 +57,8 @@ import Comment from '@/components/Comment.vue'
                 this.comments.unshift({
                     user: "currentUser",
                     msg: this.replyMsg.trim(),
-                    children: []
+                    children: [],
+                    points: 0,
                 })
                 this.replyMsg = ""
             }
