@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import {constants} from '@/constants.js'
 export default {
     name: 'Listing',
     props: {
@@ -51,11 +52,11 @@ export default {
             else return point
         },
         upArrowColor: function () {
-            if (this.upvoted) return "red"
+            if (this.upvoted) return constants.COLOR_UPVOTE
             else return "black"
         },
         downArrowColor: function () {
-            if (this.downvoted) return "turquoise"
+            if (this.downvoted) return constants.COLOR_DOWNVOTE
             else return "black"
         }
     },
