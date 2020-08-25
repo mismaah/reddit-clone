@@ -12,9 +12,12 @@
                     <i @click="upvote()" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
                     <i @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
                 </span>
-                <span class="msg">{{comment.msg}}</span>
+                <span class="textArea">
+                    <span class="msg">{{comment.msg}}</span>
+                    <i @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
+                </span>
             </div>
-            <i @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
+            
         </div>
         <div v-show="replyTextBox" class="replyBox">
             <input ref="replyInput" @keypress.enter="submitReply()" @keydown.esc="replyTextBox = null" v-model="replyMsg" placeholder="Reply to comment">
@@ -26,7 +29,7 @@
     </div>
 </template>
 
-<script>
+<script scoped>
 import Comment from '@/components/Comment.vue'
 export default {
     name: 'Comment',
@@ -107,7 +110,7 @@ export default {
             else return "black"
         },
         downArrowColor: function () {
-            if (this.downvoted) return "red"
+            if (this.downvoted) return "turquoise"
             else return "black"
         }
     },
@@ -122,7 +125,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .commentBox {
     border-left: 1px solid #bbb;
     border-bottom: 1px solid #bbb;;
@@ -134,15 +137,16 @@ export default {
     text-align: left;
 }
 .user {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: bold;
     vertical-align: middle;
 }
 .points {
-    font-size: 13px;
+    font-size: 11px;
     vertical-align: middle;
 }
 .msg {
+    font-size: 15px;
     margin-top: 0px;
     margin-bottom: 0px;
 }
@@ -154,6 +158,7 @@ export default {
     transform: scale(-1, -1);
     cursor: pointer;
     user-select: none;
+    font-size: 20px;
 }
 .collapseBtn {
     font-size: 20px;
@@ -173,6 +178,11 @@ export default {
     display: flex;
     flex-direction: column;
     font-size: 5px;
+}
+.textArea {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 .voteArrow {
     font-size: 20px;
