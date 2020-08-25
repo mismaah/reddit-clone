@@ -11,6 +11,7 @@
             <input ref="replyInput" v-model="replyMsg" placeholder="Reply to comment">
             <button @click="submitReply()">Submit</button><button @click="replyTextBox = null">Cancel </button>
         </div>
+        <p class="childCount" v-show="!showChildren && totalChildCount > 0">{{totalChildCount}} child comments</p>
         <Comment v-show="showChildren" v-for="comment in children" :comment="comment" :key="comment.msg"></Comment>
         <!-- <hr class="divider"> -->
     </div>
@@ -30,7 +31,8 @@ import Comment from '@/components/Comment.vue'
             children: [],
             replyTextBox: null,
             replyMsg: "",
-            showChildren: true
+            showChildren: true,
+            totalChildCount: 0
         }),
         methods: {
             replyBtn () {
@@ -48,11 +50,30 @@ import Comment from '@/components/Comment.vue'
                 })
                 this.replyMsg = ""
                 this.replyTextBox = null
+            },
+            countChildComments (children) {
+                var total = (children.length > 0) ? children.length : 0
+                if (children.length > 0) {
+                    for (var i of children) {
+                        total += this.countChildComments(i.children)
+                    }
+                }
+                return total
             }
         },
         mounted () {
             this.children = this.$props.comment.children
-        }
+            this.totalChildCount = this.countChildComments(this.children)
+        },
+        watch: {
+            children: {
+                handler: function () {
+                    console.log('a thing changed')
+                    this.totalChildCount = this.countChildComments(this.children)
+                },
+                deep: true
+            }
+        },
     }
 </script>
 
@@ -88,5 +109,9 @@ import Comment from '@/components/Comment.vue'
     font-size: 20px;
     cursor: pointer;
     vertical-align: middle;
+}
+.childCount {
+    font-size: 13px;
+    margin: 0px;
 }
 </style>
