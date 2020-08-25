@@ -1,9 +1,7 @@
 <template>
     <div>
         <p class="title">r/main</p>
-        <div class="divider">
-        </div>
-        <br>
+        <div class="divider"></div>
         <Listing v-for="listing in listings" :listing="listing" :key="listing.title"></Listing>
     </div>
 </template>
@@ -17,6 +15,11 @@ export default {
     },
     data: () => ({
         listings: [
+            {
+                title: "history of the world i guess",
+                user: "currentUser",
+                points: 2042,
+            },
             {
                 title: "Bruh did capitalism just fuckin DIE?",
                 user: "TestUser",
@@ -42,11 +45,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .divider {
-    border: 1px solid #000000;
-    padding-left: 20px;
-    padding-right: 20px;
+    border: 0.5px solid #000000;
+    margin-bottom: 20px;
+}
+.title {
+    font-size: large;
+    font-weight: bold;
+    text-align: left;
     margin-bottom: 0px;
+    margin-left: 50px;
 }
 </style>
