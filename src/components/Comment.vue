@@ -16,9 +16,10 @@
             </div>
             <i @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
         </div>
-        <div v-show="replyTextBox">
-            <input ref="replyInput" v-model="replyMsg" placeholder="Reply to comment">
-            <button @click="submitReply()">Submit</button><button @click="replyTextBox = null">Cancel </button>
+        <div v-show="replyTextBox" class="replyBox">
+            <input ref="replyInput" @keypress.enter="submitReply()" @keydown.esc="replyTextBox = null" v-model="replyMsg" placeholder="Reply to comment">
+            <i @click="submitReply()" title="Submit" class="material-icons replyCommands">send</i>
+            <i @click="replyTextBox = null" title="Cancel" class="material-icons replyCommands">cancel</i>
         </div>
         <p class="childCount" v-show="collapse && totalChildCount > 0">{{totalChildCount}} child <span v-if="totalChildCount == 1">comment</span><span v-else>comments</span></p>
         <Comment v-show="!collapse" v-for="comment in children" :comment="comment" :key="comment.msg"></Comment>
@@ -153,11 +154,13 @@ import Comment from '@/components/Comment.vue'
     -ms-transform: scale(-1, -1);
     transform: scale(-1, -1);
     cursor: pointer;
+    user-select: none;
 }
 .collapseBtn {
     font-size: 20px;
     cursor: pointer;
     vertical-align: middle;
+    user-select: none;
 }
 .childCount {
     font-size: 13px;
@@ -175,10 +178,13 @@ import Comment from '@/components/Comment.vue'
 .voteArrow {
     font-size: 20px;
     cursor: pointer;
+    user-select: none;
 }
-.voteArrowPressed {
-    font-size: 20px;
+.replyCommands {
     cursor: pointer;
-    color: blue;
+    user-select: none;
+}
+.replyBox {
+    display: flex;
 }
 </style>
