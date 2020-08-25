@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p class="title">r/main</p>
+        <p class="title">r/{{subName}}</p>
         <div class="divider"></div>
         <Listing v-for="listing in listings" :listing="listing" :key="listing.title"></Listing>
     </div>
@@ -14,6 +14,7 @@ export default {
         Listing
     },
     data: () => ({
+        subName: "main",
         listings: [
             {
                 title: "history of the world i guess",
