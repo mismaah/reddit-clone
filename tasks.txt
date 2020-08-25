@@ -1,1 +1,4 @@
 Thread - button to collapse/expand child comments
+Home page view
+Create new sub view
+Create new thread view
