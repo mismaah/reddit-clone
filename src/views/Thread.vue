@@ -48,9 +48,10 @@ import Comment from '@/components/Comment.vue'
         }),
         methods: {
             reply () {
+                if (!this.replyMsg || this.replyMsg.trim() == "") return
                 this.comments.unshift({
                     user: "currentUser",
-                    msg: this.replyMsg
+                    msg: this.replyMsg.trim()
                 })
             }
         }

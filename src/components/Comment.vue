@@ -2,10 +2,10 @@
     <div class="commentBox">
         <p class="user">{{comment.user}}</p>
         <p class="msg">{{comment.msg}}</p>
-        <i @click="replyTextBox = true" title="Reply" class="material-icons replyBtn">reply</i>
-        <div v-if="replyTextBox">
-            <input v-model="replyMsg" placeholder="Reply to comment">
-            <button @click="reply()">Submit</button><button @click="replyTextBox = null">Cancel </button>
+        <i @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
+        <div v-show="replyTextBox">
+            <input ref="replyInput" v-model="replyMsg" placeholder="Reply to comment">
+            <button @click="submitReply()">Submit</button><button @click="replyTextBox = null">Cancel </button>
         </div>
         <Comment v-for="comment in children" :comment="comment" :key="comment.msg"></Comment>
         <!-- <hr class="divider"> -->
@@ -28,10 +28,17 @@ import Comment from '@/components/Comment.vue'
             replyMsg: null
         }),
         methods: {
-            reply () {
+            replyBtn () {
+                this.replyTextBox = true
+                this.$nextTick(() => {
+                    this.$refs.replyInput.focus();
+                })
+            },
+            submitReply () {
+                if (!this.replyMsg || this.replyMsg.trim() == "") return
                 this.children.unshift({
                     user: "currentUser",
-                    msg: this.replyMsg,
+                    msg: this.replyMsg.trim(),
                     children: []
                 })
                 this.replyTextBox = null
