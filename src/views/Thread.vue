@@ -5,7 +5,8 @@
             <p>haiti is starting to like the idea of a revolution, especially the slaves, who free themselves by killing their masters. "why didn't we think of this before?" wait, who's in charge of france now? "me," said napoleon, trying to take over europe. luckily, they banished him to an island. but he came back! luckily, they banished him to another island. there goes latin america, becoming independent in the latin american wars of independence. britain just figured out how to turn steam into power, so now they can make many different types of machines and factories with machines in them so they can make a lot of products real fast. then they invent some trains. and conquer india and maybe put some trains there. "hey, china!" said britain. "buy stuff from us!" "nah, dude, we already got everything," says china. so britain tried to get them addicted to opium, which worked, actually. but then china made it illegal and dumped it all into the sea. so britain threw a hissy fit and made them open up five cities and give them an island. britain and russia are playing a game where they try to stop the other person from conquering afghanistan. also, the sultan of oman lives in zanzibar now: "that's just where he lives." india just had a revolution, and they would like to govern themselves now. "nope," said britain, governing them even harder than before. incoming telegram: HI I JUST SENT YOU A MESSAGE THRU A WIRE technology is about to go crazy!
             </p>
         </div>
-        <input v-model="replyMsg" placeholder="Reply to thread">
+        <textarea v-model="replyMsg" rows="3" placeholder="Reply to thread"></textarea>
+        <br>
         <button @click="reply">Submit</button>
         <!-- <hr class="divider"> -->
         <Comment v-for="comment in comments" :comment="comment" :key="comment.msg"></Comment>
@@ -20,7 +21,7 @@ import Comment from '@/components/Comment.vue'
             Comment
         },
         data: () => ({
-            replyMsg: null,
+            replyMsg: "",
             comments: [
                 {
                     user: "TestUser",
@@ -51,8 +52,10 @@ import Comment from '@/components/Comment.vue'
                 if (!this.replyMsg || this.replyMsg.trim() == "") return
                 this.comments.unshift({
                     user: "currentUser",
-                    msg: this.replyMsg.trim()
+                    msg: this.replyMsg.trim(),
+                    children: []
                 })
+                this.replyMsg = ""
             }
         }
     }
@@ -79,5 +82,9 @@ import Comment from '@/components/Comment.vue'
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom: 0px;
+}
+textarea {
+  font-family: inherit;
+  width: 80%;
 }
 </style>

@@ -25,7 +25,7 @@ import Comment from '@/components/Comment.vue'
         data: () => ({
             children: [],
             replyTextBox: null,
-            replyMsg: null
+            replyMsg: ""
         }),
         methods: {
             replyBtn () {
@@ -41,6 +41,7 @@ import Comment from '@/components/Comment.vue'
                     msg: this.replyMsg.trim(),
                     children: []
                 })
+                this.replyMsg = ""
                 this.replyTextBox = null
             }
         },
