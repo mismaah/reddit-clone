@@ -1,13 +1,17 @@
 <template>
     <div class="commentBox">
-        <p class="user">{{comment.user}}</p>
+        <div>
+            <i v-if="showChildren" @click="showChildren = false" title="Hide child comments" class="material-icons collapseBtn">remove</i>
+            <i v-else @click="showChildren = true" title="Show child comments" class="material-icons collapseBtn">add</i>
+            <span class="user">{{comment.user}}</span>
+        </div>
         <p class="msg">{{comment.msg}}</p>
         <i @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
         <div v-show="replyTextBox">
             <input ref="replyInput" v-model="replyMsg" placeholder="Reply to comment">
             <button @click="submitReply()">Submit</button><button @click="replyTextBox = null">Cancel </button>
         </div>
-        <Comment v-for="comment in children" :comment="comment" :key="comment.msg"></Comment>
+        <Comment v-show="showChildren" v-for="comment in children" :comment="comment" :key="comment.msg"></Comment>
         <!-- <hr class="divider"> -->
     </div>
 </template>
@@ -25,7 +29,8 @@ import Comment from '@/components/Comment.vue'
         data: () => ({
             children: [],
             replyTextBox: null,
-            replyMsg: ""
+            replyMsg: "",
+            showChildren: true
         }),
         methods: {
             replyBtn () {
@@ -65,8 +70,7 @@ import Comment from '@/components/Comment.vue'
 .user {
     font-size: 13px;
     font-weight: bold;
-    margin-top: 0px;
-    margin-bottom: 0px;
+    vertical-align: middle;
 }
 .msg {
     margin-top: 0px;
@@ -79,5 +83,10 @@ import Comment from '@/components/Comment.vue'
     -ms-transform: scale(-1, -1);
     transform: scale(-1, -1);
     cursor: pointer;
+}
+.collapseBtn {
+    font-size: 20px;
+    cursor: pointer;
+    vertical-align: middle;
 }
 </style>
