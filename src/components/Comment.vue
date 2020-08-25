@@ -29,7 +29,8 @@
     </div>
 </template>
 
-<script scoped>
+<script>
+import {constants} from '@/constants.js'
 import Comment from '@/components/Comment.vue'
 export default {
     name: 'Comment',
@@ -106,11 +107,11 @@ export default {
             else return point
         },
         upArrowColor: function () {
-            if (this.upvoted) return "red"
+            if (this.upvoted) return constants.COLOR_UPVOTE
             else return "black"
         },
         downArrowColor: function () {
-            if (this.downvoted) return "turquoise"
+            if (this.downvoted) return constants.COLOR_DOWNVOTE
             else return "black"
         }
     },
