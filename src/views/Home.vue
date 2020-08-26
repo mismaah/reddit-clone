@@ -1,6 +1,9 @@
 <template>
     <div>
-        <p class="title">r/</p>
+        <span class="header">
+            <p class="title">r/</p>
+            <p class="headerBtn"><router-link to="/createsub">create sub</router-link></p>
+        </span>
         <div class="divider"></div>
         <Listing v-for="listing in listings" :listing="listing" parentSub="home" :key="listing.title"></Listing>
     </div>
@@ -63,10 +66,28 @@ export default {
 </script>
 
 <style scoped>
+.header {
+    display: flex;
+    justify-content: space-between;
+}
 .title {
     font-size: large;
     font-weight: bold;
     margin-bottom: 0px;
     margin-left: 50px;
 }
+.headerBtn {
+    display: flex;
+    text-align: end;
+    margin-bottom: 0px;
+    margin-right: 50px;
+    cursor: pointer;
+}
+.headerBtn:hover {
+    text-decoration: underline;
+}
+a, a:hover, a:focus, a:active {
+      text-decoration: none;
+      color: inherit;
+ }
 </style>
