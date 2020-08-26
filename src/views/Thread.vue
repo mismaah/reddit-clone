@@ -180,6 +180,7 @@ export default {
 }
 textarea {
   font-family: inherit;
+  font-size: 15px;
   width: 80%;
 }
 </style>
