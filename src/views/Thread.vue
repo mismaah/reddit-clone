@@ -127,10 +127,6 @@ export default {
 </script>
 
 <style scoped>
-.divider {
-    border: 0.5px solid #000000;
-    margin-bottom: 20px;
-}
 .sub {
     font-size: large;
     font-weight: bold;
@@ -145,13 +141,7 @@ export default {
     padding-right: 20px;
     text-align: left;
 }
-.title {
-    text-align: left;
-}
 .voteArea {
-    display: flex;
-    flex-direction: column;
-    font-size: 5px;
     margin-right: 10px;
     min-width: 50px;
 }
@@ -170,14 +160,9 @@ export default {
     padding-bottom: 5px
 }
 .textArea {
-    display: flex;
-    flex-direction: column;
     align-items: flex-start;
 }
 .voteArrow {
-    font-size: 20px;
-    cursor: pointer;
-    user-select: none;
     margin: -5px;
 }
 .threadUtil {

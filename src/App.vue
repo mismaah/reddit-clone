@@ -28,4 +28,25 @@
     vertical-align: middle;
     color: darkcyan;
 }
+.divider {
+    border: 0.5px solid #000000;
+    margin-bottom: 20px;
+}
+.title {
+    text-align: left;
+}
+.voteArea {
+    display: flex;
+    flex-direction: column;
+    font-size: 5px;
+}
+.textArea {
+    display: flex;
+    flex-direction: column;
+}
+.voteArrow {
+    font-size: 20px;
+    cursor: pointer;
+    user-select: none;
+}
 </style>

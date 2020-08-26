@@ -180,20 +180,8 @@ export default {
     display: flex;
     flex-direction: row;
 }
-.voteArea {
-    display: flex;
-    flex-direction: column;
-    font-size: 5px;
-}
 .textArea {
-    display: flex;
-    flex-direction: column;
     align-items: flex-start;
-}
-.voteArrow {
-    font-size: 20px;
-    cursor: pointer;
-    user-select: none;
 }
 .replyCommands {
     cursor: pointer;

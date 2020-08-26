@@ -79,21 +79,13 @@ export default {
     margin-bottom: 15px;
 }
 .voteArea {
-    display: flex;
-    flex-direction: column;
-    font-size: 5px;
     margin-right: 10px;
     min-width: 50px;
 }
 .voteArrow {
-    font-size: 20px;
-    cursor: pointer;
-    user-select: none;
     margin: -5px;
 }
 .textArea {
-    display: flex;
-    flex-direction: column;
     text-align: left;
 }
 </style>

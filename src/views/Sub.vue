@@ -47,14 +47,9 @@ export default {
 </script>
 
 <style scoped>
-.divider {
-    border: 0.5px solid #000000;
-    margin-bottom: 20px;
-}
 .title {
     font-size: large;
     font-weight: bold;
-    text-align: left;
     margin-bottom: 0px;
     margin-left: 50px;
 }
