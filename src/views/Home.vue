@@ -80,8 +80,10 @@ export default {
     display: flex;
     text-align: end;
     margin-bottom: 0px;
+    margin-top: 0px;
     margin-right: 50px;
     cursor: pointer;
+    align-self: flex-end;
 }
 .headerBtn:hover {
     text-decoration: underline;

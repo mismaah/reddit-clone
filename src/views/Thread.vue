@@ -131,6 +131,7 @@ export default {
     font-size: large;
     font-weight: bold;
     text-align: left;
+    margin-top: 0px;
     margin-bottom: 0px;
     margin-left: 50px;
 }

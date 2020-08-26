@@ -21,7 +21,9 @@ body {
     color: #2c3e50;
 }
 #routerview {
-    margin: 8px;
+    margin-top: 15px;
+    margin-left: 8px;
+    margin-right: 8px;
 }
 #nav {
     background-color:rgb(202, 202, 202);
@@ -46,6 +48,7 @@ body {
 }
 .title {
     text-align: left;
+    margin-top: 0px;
 }
 .voteArea {
     display: flex;
