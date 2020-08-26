@@ -1,12 +1,12 @@
 <template>
     <div class="commentBox">
         <div>
-            <i v-if="!collapse" @click="collapse = true" title="Hide child comments" class="material-icons collapseBtn">remove</i>
-            <i v-else @click="collapse = false" title="Show child comments" class="material-icons collapseBtn">add</i>
+            <i v-if="!collapsed" @click="collapse()" title="Hide child comments" class="material-icons collapseBtn">remove</i>
+            <i v-else @click="collapse()" title="Show child comments" class="material-icons collapseBtn">add</i>
             <span class="user">{{comment.user}} </span>
             <span class="points"> {{points}} <span v-if="points == 1">point</span><span v-else>points</span></span>
         </div>
-        <div v-show="!collapse">
+        <div v-show="!collapsed">
             <div class="contents">
                 <span class="voteArea">
                     <i @click="upvote()" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
@@ -24,8 +24,8 @@
             <i @click="submitReply()" title="Submit" class="material-icons replyCommands">send</i>
             <i @click="replyTextBox = null" title="Cancel" class="material-icons replyCommands">cancel</i>
         </div>
-        <p class="childCount" v-show="collapse && totalChildCount > 0">{{totalChildCount}} child <span v-if="totalChildCount == 1">comment</span><span v-else>comments</span></p>
-        <Comment v-show="!collapse" v-for="comment in children" :comment="comment" :key="comment.msg"></Comment>
+        <p class="childCount" v-show="collapsed && totalChildCount > 0">{{totalChildCount}} child <span v-if="totalChildCount == 1">comment</span><span v-else>comments</span></p>
+        <Comment v-show="!collapsed" v-for="comment in children" :comment="comment" :key="comment.msg"></Comment>
     </div>
 </template>
 
@@ -38,13 +38,14 @@ export default {
         Comment
     },
     props: {
-        comment: Object
+        comment: Object,
+        collapseAll: Boolean,
     },
     data: () => ({
         children: [],
         replyTextBox: null,
         replyMsg: "",
-        collapse: false,
+        collapsed: false,
         totalChildCount: 0,
         upvoted: false,
         downvoted: false,
@@ -89,6 +90,9 @@ export default {
                 this.downvoted = true
                 this.upvoted = false
             }
+        },
+        collapse () {
+            this.collapsed = !this.collapsed
         }
     },
     mounted () {
@@ -122,6 +126,12 @@ export default {
             },
             deep: true
         },
+        collapseAll: {
+            handler: function () {
+                if (this.collapseAll) this.collapsed = true
+                else this.collapsed = false
+            }
+        }
     },
 }
 </script>

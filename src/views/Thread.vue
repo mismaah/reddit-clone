@@ -17,10 +17,14 @@
             <p>haiti is starting to like the idea of a revolution, especially the slaves, who free themselves by killing their masters. "why didn't we think of this before?" wait, who's in charge of france now? "me," said napoleon, trying to take over europe. luckily, they banished him to an island. but he came back! luckily, they banished him to another island. there goes latin america, becoming independent in the latin american wars of independence. britain just figured out how to turn steam into power, so now they can make many different types of machines and factories with machines in them so they can make a lot of products real fast. then they invent some trains. and conquer india and maybe put some trains there. "hey, china!" said britain. "buy stuff from us!" "nah, dude, we already got everything," says china. so britain tried to get them addicted to opium, which worked, actually. but then china made it illegal and dumped it all into the sea. so britain threw a hissy fit and made them open up five cities and give them an island. britain and russia are playing a game where they try to stop the other person from conquering afghanistan. also, the sultan of oman lives in zanzibar now: "that's just where he lives." india just had a revolution, and they would like to govern themselves now. "nope," said britain, governing them even harder than before. incoming telegram: HI I JUST SENT YOU A MESSAGE THRU A WIRE technology is about to go crazy!
             </p>
         </div>
+        <div class="threadUtil">
+            <p v-if="collapseAll" class="utilBtn" @click="collapseComments()" >expand all comments</p>
+            <p v-else class="utilBtn" @click="collapseComments()" >collapse all comments</p>
+        </div>
         <textarea v-model="replyMsg" rows="3" placeholder="Reply to thread"></textarea>
         <br>
         <button @click="reply">Submit</button>
-        <Comment v-for="comment in comments" :comment="comment" :key="comment.msg"></Comment>
+        <Comment v-for="comment in comments" :comment="comment" :collapseAll="collapseAll" :key="comment.msg"></Comment>
     </div>
 </template>
 
@@ -39,6 +43,7 @@ export default {
         replyMsg: "",
         upvoted: false,
         downvoted: false,
+        collapseAll: false,
         comments: [
             {
                 user: "TestUser",
@@ -92,6 +97,9 @@ export default {
                 this.downvoted = true
                 this.upvoted = false
             }
+        },
+        collapseComments () {
+            this.collapseAll = !this.collapseAll
         }
     },
     computed: {
@@ -135,7 +143,6 @@ export default {
     border: 1px solid #000000;
     padding-left: 20px;
     padding-right: 20px;
-    margin-bottom: 20px;
     text-align: left;
 }
 .title {
@@ -172,6 +179,20 @@ export default {
     cursor: pointer;
     user-select: none;
     margin: -5px;
+}
+.threadUtil {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    margin-left: 20px;
+}
+.utilBtn {
+    cursor: pointer;
+    margin: 0px;
+    font-size: 12px;
+}
+.utilBtn:hover {
+    text-decoration: underline;
 }
 textarea {
   font-family: inherit;
