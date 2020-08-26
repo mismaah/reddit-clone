@@ -2,17 +2,7 @@
     <div>
         <p class="sub">r/{{subName}}</p>
         <div class="divider"></div>
-        <div class="header">
-            <span class="voteArea">
-                <i @click="upvote()" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
-                <p class="points">{{points}}</p>
-                <i @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
-            </span>
-            <span class="textArea">
-                <span class="title">{{title}}</span>
-                <span class="user">{{user}}</span>
-            </span>
-        </div>
+        <Listing :listing="listing" :parentSub="subName">{{listing.title}}</Listing>
         <div class="box">
             <p>haiti is starting to like the idea of a revolution, especially the slaves, who free themselves by killing their masters. "why didn't we think of this before?" wait, who's in charge of france now? "me," said napoleon, trying to take over europe. luckily, they banished him to an island. but he came back! luckily, they banished him to another island. there goes latin america, becoming independent in the latin american wars of independence. britain just figured out how to turn steam into power, so now they can make many different types of machines and factories with machines in them so they can make a lot of products real fast. then they invent some trains. and conquer india and maybe put some trains there. "hey, china!" said britain. "buy stuff from us!" "nah, dude, we already got everything," says china. so britain tried to get them addicted to opium, which worked, actually. but then china made it illegal and dumped it all into the sea. so britain threw a hissy fit and made them open up five cities and give them an island. britain and russia are playing a game where they try to stop the other person from conquering afghanistan. also, the sultan of oman lives in zanzibar now: "that's just where he lives." india just had a revolution, and they would like to govern themselves now. "nope," said britain, governing them even harder than before. incoming telegram: HI I JUST SENT YOU A MESSAGE THRU A WIRE technology is about to go crazy!
             </p>
@@ -31,15 +21,15 @@
 <script>
 import {constants} from '@/constants.js'
 import Comment from '@/components/Comment.vue'
+import Listing from '@/components/Listing.vue'
 export default {
     name: 'Thread',
     components: {
-        Comment
+        Comment,
+        Listing
     },
     data: () => ({
         subName: "something",
-        title: "history of the world i guess",
-        user: "currentUser",
         replyMsg: "",
         upvoted: false,
         downvoted: false,
@@ -121,7 +111,15 @@ export default {
         downArrowColor: function () {
             if (this.downvoted) return constants.COLOR_DOWNVOTE
             else return "black"
-        }
+        },
+        listing: function () {
+            return {
+                title: "history of the world i guess",
+                user: "currentUser",
+                points: this.points,
+                sub: "something"
+            }
+        },
     },
 }
 </script>
