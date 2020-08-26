@@ -6,8 +6,12 @@
             <i @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
         </span>
         <span class="textArea">
-            <span class="">{{listing.title}}</span>
-            <span class="user">{{listing.user}}</span>
+            <span>{{listing.title}}</span>
+            <span class="subtitle">
+                <span class="user">{{listing.user}} </span>
+                <span v-if="!inSub">to </span>
+                <span v-if="!inSub" class="subName">r/{{listing.sub}}</span>
+            </span>
         </span>
     </div>
 </template>
@@ -17,7 +21,8 @@ import {constants} from '@/constants.js'
 export default {
     name: 'Listing',
     props: {
-        listing: Object
+        listing: Object,
+        parentSub: String
     },
     data: () => ({
         upvoted: false,
@@ -58,6 +63,10 @@ export default {
         downArrowColor: function () {
             if (this.downvoted) return constants.COLOR_DOWNVOTE
             else return "black"
+        },
+        inSub: function () {
+            if (this.parentSub == this.listing.sub) return true
+            else return false
         }
     },
 }
@@ -87,5 +96,12 @@ export default {
 }
 .textArea {
     text-align: left;
+}
+.subtitle {
+    display: flex;
+    flex-direction: row;
+    font-size: 11px;
+    vertical-align: middle;
+    white-space: pre;
 }
 </style>
