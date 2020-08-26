@@ -141,11 +141,6 @@ export default {
 .title {
     text-align: left;
 }
-.user {
-    font-size: 11px;
-    font-weight: bold;
-    vertical-align: middle;
-}
 .voteArea {
     display: flex;
     flex-direction: column;

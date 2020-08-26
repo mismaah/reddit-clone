@@ -137,11 +137,6 @@ export default {
     margin-left: 20px;
     text-align: left;
 }
-.user {
-    font-size: 11px;
-    font-weight: bold;
-    vertical-align: middle;
-}
 .points {
     font-size: 11px;
     vertical-align: middle;

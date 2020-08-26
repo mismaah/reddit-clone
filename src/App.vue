@@ -23,4 +23,10 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+.user {
+    font-size: 11px;
+    font-weight: bold;
+    vertical-align: middle;
+    color: darkcyan;
+}
 </style>

@@ -64,11 +64,6 @@ export default {
 </script>
 
 <style scoped>
-.user {
-    font-size: 11px;
-    font-weight: bold;
-    vertical-align: middle;
-}
 .points {
     font-size: 15px;
     vertical-align: middle;
