@@ -2,7 +2,7 @@
     <div>
         <p class="title">r/{{subName}}</p>
         <div class="divider"></div>
-        <Listing v-for="listing in listings" :listing="listing" :key="listing.title"></Listing>
+        <Listing v-for="listing in listings" :listing="listing" :parentSub="subName" :key="listing.title"></Listing>
     </div>
 </template>
 
@@ -14,32 +14,31 @@ export default {
         Listing
     },
     data: () => ({
-        subName: "main",
+        subName: "something",
         listings: [
             {
                 title: "history of the world i guess",
                 user: "currentUser",
                 points: 2042,
-            },
-            {
-                title: "Bruh did capitalism just fuckin DIE?",
-                user: "TestUser",
-                points: 20,
+                sub: "something"
             },
             {
                 title: "October Surprise will be a nationwide Covid shutdown",
                 user: "UserTest",
                 points: 57,
+                sub: "something"
             },
             {
                 title: "Medium-rare sirloin with baked french fries.",
                 user: "mk_bla",
                 points: 3978,
+                sub: "something"
             },
             {
                 title: "me_irl",
                 user: "okisleep",
                 points: 2185,
+                sub: "something"
             },
         ]
     })
