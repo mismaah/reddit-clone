@@ -49,4 +49,10 @@
     cursor: pointer;
     user-select: none;
 }
+.subName {
+    font-size: 11px;
+    font-weight: bold;
+    vertical-align: middle;
+    color: darkslateblue;
+}
 </style>
