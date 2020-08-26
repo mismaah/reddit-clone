@@ -37,7 +37,7 @@ export default {
         Comment
     },
     data: () => ({
-        subName: "main",
+        subName: "something",
         title: "history of the world i guess",
         user: "currentUser",
         replyMsg: "",
