@@ -1,26 +1,38 @@
 <template>
     <div id="app">
         <div id="nav">
-            <router-link to="/">Home</router-link> | <router-link to="/sub">Sub</router-link> | <router-link to="/thread">Thread</router-link>
+            <router-link to="/">HOME</router-link> - 
+            <router-link to="/sub">SUB</router-link> - 
+            <router-link to="/thread">THREAD</router-link>
         </div>
-        <router-view/>
+        <router-view id="routerview"/>
     </div>
 </template>
 
 <style>
+body {
+    margin: 0px;
+}
 #app {
-  font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+    font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
 }
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+#routerview {
+    margin: 8px;
 }
-#nav a.router-link-exact-active {
-  color: #42b983;
+#nav {
+    background-color:rgb(202, 202, 202);
+    margin: 0px;
+    font-size: 12px;
+    padding: 3px;
+    font-weight: 500;
+}
+#nav a, #nav a:hover, #nav a:focus, #nav a:active {
+    text-decoration: none;
+    color: inherit;
 }
 .user {
     font-size: 11px;
