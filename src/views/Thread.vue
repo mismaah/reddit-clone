@@ -11,9 +11,11 @@
             <p v-if="collapseAll" class="utilBtn" @click="collapseComments()" >expand all comments</p>
             <p v-else class="utilBtn" @click="collapseComments()" >collapse all comments</p>
         </div>
-        <textarea v-model="replyMsg" rows="3" placeholder="Reply to thread"></textarea>
-        <br>
-        <button @click="reply">Submit</button>
+        <div v-if="this.$store.getters.isLoggedIn">
+            <textarea v-model="replyMsg" rows="3" placeholder="Reply to thread"></textarea>
+            <br>
+            <button @click="reply">Submit</button>
+        </div>
         <Comment v-for="comment in comments" :comment="comment" :collapseAll="collapseAll" :key="comment.msg"></Comment>
     </div>
 </template>
@@ -67,7 +69,7 @@
             reply () {
                 if (!this.replyMsg || this.replyMsg.trim() == "") return
                 this.comments.unshift({
-                    user: "currentUser",
+                    user: this.$store.getters.getCurrentUser,
                     msg: this.replyMsg.trim(),
                     children: [],
                     points: 0,

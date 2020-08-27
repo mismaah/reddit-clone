@@ -8,13 +8,13 @@
         </div>
         <div v-show="!collapsed">
             <div class="contents">
-                <span class="voteArea">
+                <span v-if="this.$store.getters.isLoggedIn" class="voteArea">
                     <i @click="upvote()" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
                     <i @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
                 </span>
                 <span class="textArea">
                     <span class="msg">{{comment.msg}}</span>
-                    <i @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
+                    <i v-if="this.$store.getters.isLoggedIn" @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
                 </span>
             </div>
             
@@ -60,7 +60,7 @@
             submitReply () {
                 if (!this.replyMsg || this.replyMsg.trim() == "") return
                 this.children.unshift({
-                    user: "currentUser",
+                    user: this.$store.getters.getCurrentUser,
                     msg: this.replyMsg.trim(),
                     children: [],
                     points: 0,

@@ -1,9 +1,9 @@
 <template>
     <div class="contents">
         <span class="voteArea">
-            <i @click="upvote()" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
+            <i v-if="this.$store.getters.isLoggedIn" @click="upvote()" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
             <p class="points">{{points}}</p>
-            <i @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
+            <i v-if="this.$store.getters.isLoggedIn" @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
         </span>
         <span class="textArea">
             <span>{{listing.title}}</span>

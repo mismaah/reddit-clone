@@ -2,7 +2,7 @@
     <div>
         <span class="header">
             <p class="title">r/{{subName}}</p>
-            <p class="headerBtn"><router-link to="/createthread">create thread</router-link></p>
+            <p class="headerBtn" v-if="this.$store.getters.isLoggedIn"><router-link to="/createthread">create thread</router-link></p>
         </span>
         <div class="divider"></div>
         <Listing v-for="listing in listings" :listing="listing" :parentSub="subName" :key="listing.title"></Listing>

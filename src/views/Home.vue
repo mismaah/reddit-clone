@@ -2,7 +2,7 @@
     <div>
         <span class="header">
             <p class="title">r/</p>
-            <p class="headerBtn"><router-link to="/createsub">create sub</router-link></p>
+            <p class="headerBtn" v-if="this.$store.getters.isLoggedIn"><router-link to="/createsub">create sub</router-link></p>
         </span>
         <div class="divider"></div>
         <Listing v-for="listing in listings" :listing="listing" parentSub="home" :key="listing.title"></Listing>
