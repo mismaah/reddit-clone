@@ -5,6 +5,8 @@ import Sub from '../views/Sub.vue'
 import Home from '../views/Home.vue'
 import CreateSub from '../views/CreateSub.vue'
 import CreateThread from '../views/CreateThread.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 
 Vue.use(VueRouter)
 
@@ -13,6 +15,16 @@ const routes = [
         path: '/',
         name: 'Home',
         component: Home
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: Register
     },
     {
         path: '/sub',

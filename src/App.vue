@@ -1,9 +1,15 @@
 <template>
     <div id="app">
         <div id="nav">
-            <router-link to="/">HOME</router-link> - 
-            <router-link to="/sub">SUB</router-link> - 
-            <router-link to="/thread">THREAD</router-link>
+            <span class="navleft">
+                <router-link to="/">HOME</router-link> - 
+                <router-link to="/sub">SUB</router-link> - 
+                <router-link to="/thread">THREAD</router-link>
+            </span>
+            <span class="navright">
+                <router-link to="/login">LOGIN</router-link> - 
+                <router-link to="/register">REGISTER</router-link>
+            </span>
         </div>
         <router-view id="routerview"/>
     </div>
@@ -31,10 +37,18 @@ body {
     font-size: 12px;
     padding: 3px;
     font-weight: 500;
+    display: flex;
+    justify-content: space-between;
 }
 #nav a, #nav a:hover, #nav a:focus, #nav a:active {
     text-decoration: none;
     color: inherit;
+}
+.navleft {
+    padding-left: 10px;
+}
+.navright {
+    padding-right: 10px;
 }
 .user {
     font-size: 11px;
