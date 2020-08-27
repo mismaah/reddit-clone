@@ -30,110 +30,110 @@
 </template>
 
 <script>
-import {constants} from '@/constants.js'
-import Comment from '@/components/Comment.vue'
-export default {
-    name: 'Comment',
-    components: {
-        Comment
-    },
-    props: {
-        comment: Object,
-        collapseAll: Boolean,
-    },
-    data: () => ({
-        children: [],
-        replyTextBox: null,
-        replyMsg: "",
-        collapsed: false,
-        totalChildCount: 0,
-        upvoted: false,
-        downvoted: false,
-    }),
-    methods: {
-        replyBtn () {
-            this.replyTextBox = true
-            this.$nextTick(() => {
-                this.$refs.replyInput.focus();
-            })
+    import {constants} from '@/constants.js'
+    import Comment from '@/components/Comment.vue'
+    export default {
+        name: 'Comment',
+        components: {
+            Comment
         },
-        submitReply () {
-            if (!this.replyMsg || this.replyMsg.trim() == "") return
-            this.children.unshift({
-                user: "currentUser",
-                msg: this.replyMsg.trim(),
-                children: [],
-                points: 0,
-            })
-            this.replyMsg = ""
-            this.replyTextBox = null
+        props: {
+            comment: Object,
+            collapseAll: Boolean,
         },
-        countChildComments (children) {
-            var total = (children.length > 0) ? children.length : 0
-            if (children.length > 0) {
-                for (var i of children) {
-                    total += this.countChildComments(i.children)
+        data: () => ({
+            children: [],
+            replyTextBox: null,
+            replyMsg: "",
+            collapsed: false,
+            totalChildCount: 0,
+            upvoted: false,
+            downvoted: false,
+        }),
+        methods: {
+            replyBtn () {
+                this.replyTextBox = true
+                this.$nextTick(() => {
+                    this.$refs.replyInput.focus();
+                })
+            },
+            submitReply () {
+                if (!this.replyMsg || this.replyMsg.trim() == "") return
+                this.children.unshift({
+                    user: "currentUser",
+                    msg: this.replyMsg.trim(),
+                    children: [],
+                    points: 0,
+                })
+                this.replyMsg = ""
+                this.replyTextBox = null
+            },
+            countChildComments (children) {
+                var total = (children.length > 0) ? children.length : 0
+                if (children.length > 0) {
+                    for (var i of children) {
+                        total += this.countChildComments(i.children)
+                    }
+                }
+                return total
+            },
+            upvote () {
+                if (this.upvoted) this.upvoted = false
+                else {
+                    this.upvoted = true
+                    this.downvoted = false
+                }
+            },
+            downvote () {
+                if (this.downvoted) this.downvoted = false
+                else {
+                    this.downvoted = true
+                    this.upvoted = false
+                }
+            },
+            collapse () {
+                this.collapsed = !this.collapsed
+            }
+        },
+        mounted () {
+            this.children = this.$props.comment.children
+        },
+        computed: {
+            voteState: function () {
+                if (this.downvoted && !this.upvoted) return 1
+                if (this.upvoted && !this.downvoted) return 2
+                else return 0
+            },
+            points: function () {
+                var point = this.$props.comment.points
+                if (this.voteState == 1) return point - 1
+                if (this.voteState == 2) return point + 1
+                else return point
+            },
+            upArrowColor: function () {
+                if (this.upvoted) return constants.COLOR_UPVOTE
+                else return "black"
+            },
+            downArrowColor: function () {
+                if (this.downvoted) return constants.COLOR_DOWNVOTE
+                else return "black"
+            }
+        },
+        watch: {
+            children: {
+                handler: function () {
+                    this.totalChildCount = this.countChildComments(this.children)
+                },
+                deep: true
+            },
+            collapseAll: {
+                handler: function () {
+                    if (this.collapseAll) this.collapsed = true
+                    else this.collapsed = false
                 }
             }
-            return total
         },
-        upvote () {
-            if (this.upvoted) this.upvoted = false
-            else {
-                this.upvoted = true
-                this.downvoted = false
-            }
-        },
-        downvote () {
-            if (this.downvoted) this.downvoted = false
-            else {
-                this.downvoted = true
-                this.upvoted = false
-            }
-        },
-        collapse () {
-            this.collapsed = !this.collapsed
-        }
-    },
-    mounted () {
-        this.children = this.$props.comment.children
-    },
-    computed: {
-        voteState: function () {
-            if (this.downvoted && !this.upvoted) return 1
-            if (this.upvoted && !this.downvoted) return 2
-            else return 0
-        },
-        points: function () {
-            var point = this.$props.comment.points
-            if (this.voteState == 1) return point - 1
-            if (this.voteState == 2) return point + 1
-            else return point
-        },
-        upArrowColor: function () {
-            if (this.upvoted) return constants.COLOR_UPVOTE
-            else return "black"
-        },
-        downArrowColor: function () {
-            if (this.downvoted) return constants.COLOR_DOWNVOTE
-            else return "black"
-        }
-    },
-    watch: {
-        children: {
-            handler: function () {
-                this.totalChildCount = this.countChildComments(this.children)
-            },
-            deep: true
-        },
-        collapseAll: {
-            handler: function () {
-                if (this.collapseAll) this.collapsed = true
-                else this.collapsed = false
-            }
-        }
-    },
-}
+    }
 </script>
 
 <style scoped>

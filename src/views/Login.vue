@@ -7,13 +7,13 @@
 </template>
 
 <script>
-export default {
-    name: "Login",
-    data: () => ({
-        username: "",
-        password: "",
-    })
-}
+    export default {
+        name: "Login",
+        data: () => ({
+            username: "",
+            password: "",
+        })
+    }
 </script>
 
 <style scoped>

@@ -17,59 +17,59 @@
 </template>
 
 <script>
-import {constants} from '@/constants.js'
-export default {
-    name: 'Listing',
-    props: {
-        listing: Object,
-        parentSub: String
-    },
-    data: () => ({
-        upvoted: false,
-        downvoted: false,
-    }),
-    methods: {
-        upvote () {
-            if (this.upvoted) this.upvoted = false
-            else {
-                this.upvoted = true
-                this.downvoted = false
+    import {constants} from '@/constants.js'
+    export default {
+        name: 'Listing',
+        props: {
+            listing: Object,
+            parentSub: String
+        },
+        data: () => ({
+            upvoted: false,
+            downvoted: false,
+        }),
+        methods: {
+            upvote () {
+                if (this.upvoted) this.upvoted = false
+                else {
+                    this.upvoted = true
+                    this.downvoted = false
+                }
+            },
+            downvote () {
+                if (this.downvoted) this.downvoted = false
+                else {
+                    this.downvoted = true
+                    this.upvoted = false
+                }
             }
         },
-        downvote () {
-            if (this.downvoted) this.downvoted = false
-            else {
-                this.downvoted = true
-                this.upvoted = false
+        computed: {
+            voteState: function () {
+                if (this.downvoted && !this.upvoted) return 1
+                if (this.upvoted && !this.downvoted) return 2
+                else return 0
+            },
+            points: function () {
+                var point = this.$props.listing.points
+                if (this.voteState == 1) return point - 1
+                if (this.voteState == 2) return point + 1
+                else return point
+            },
+            upArrowColor: function () {
+                if (this.upvoted) return constants.COLOR_UPVOTE
+                else return "black"
+            },
+            downArrowColor: function () {
+                if (this.downvoted) return constants.COLOR_DOWNVOTE
+                else return "black"
+            },
+            inSub: function () {
+                if (this.parentSub == this.listing.sub) return true
+                else return false
             }
-        }
-    },
-    computed: {
-        voteState: function () {
-            if (this.downvoted && !this.upvoted) return 1
-            if (this.upvoted && !this.downvoted) return 2
-            else return 0
         },
-        points: function () {
-            var point = this.$props.listing.points
-            if (this.voteState == 1) return point - 1
-            if (this.voteState == 2) return point + 1
-            else return point
-        },
-        upArrowColor: function () {
-            if (this.upvoted) return constants.COLOR_UPVOTE
-            else return "black"
-        },
-        downArrowColor: function () {
-            if (this.downvoted) return constants.COLOR_DOWNVOTE
-            else return "black"
-        },
-        inSub: function () {
-            if (this.parentSub == this.listing.sub) return true
-            else return false
-        }
-    },
-}
+    }
 </script>
 
 <style scoped>

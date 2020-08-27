@@ -19,109 +19,109 @@
 </template>
 
 <script>
-import {constants} from '@/constants.js'
-import Comment from '@/components/Comment.vue'
-import Listing from '@/components/Listing.vue'
-export default {
-    name: 'Thread',
-    components: {
-        Comment,
-        Listing
-    },
-    data: () => ({
-        subName: "something",
-        replyMsg: "",
-        upvoted: false,
-        downvoted: false,
-        collapseAll: false,
-        comments: [
-            {
-                user: "TestUser",
-                msg: "Yes",
-                points: 5,
-                children: [
-                    {
-                        user: "UserTest",
-                        msg: "No",
-                        points: 1,
-                        children: [
-                            {
-                                user: "AnotherTest",
-                                msg: "wedfbiskd",
-                                points: -1,
-                                children: []
-                            }
-                        ]
-                    },
-                    {
-                        user: "mm",
-                        msg: "pp",
-                        points: 0,
-                        children: []
-                    }
-                ]
-            }
-        ]
-    }),
-    methods: {
-        reply () {
-            if (!this.replyMsg || this.replyMsg.trim() == "") return
-            this.comments.unshift({
-                user: "currentUser",
-                msg: this.replyMsg.trim(),
-                children: [],
-                points: 0,
-            })
-            this.replyMsg = ""
+    import {constants} from '@/constants.js'
+    import Comment from '@/components/Comment.vue'
+    import Listing from '@/components/Listing.vue'
+    export default {
+        name: 'Thread',
+        components: {
+            Comment,
+            Listing
         },
-        upvote () {
-            if (this.upvoted) this.upvoted = false
-            else {
-                this.upvoted = true
-                this.downvoted = false
-            }
-        },
-        downvote () {
-            if (this.downvoted) this.downvoted = false
-            else {
-                this.downvoted = true
-                this.upvoted = false
-            }
-        },
-        collapseComments () {
-            this.collapseAll = !this.collapseAll
-        }
-    },
-    computed: {
-        voteState: function () {
-            if (this.downvoted && !this.upvoted) return 1
-            if (this.upvoted && !this.downvoted) return 2
-            else return 0
-        },
-        points: function () {
-            var point = 2042
-            if (this.voteState == 1) return point - 1
-            if (this.voteState == 2) return point + 1
-            else return point
-        },
-        upArrowColor: function () {
-            if (this.upvoted) return constants.COLOR_UPVOTE
-            else return "black"
-        },
-        downArrowColor: function () {
-            if (this.downvoted) return constants.COLOR_DOWNVOTE
-            else return "black"
-        },
-        listing: function () {
-            return {
-                title: "history of the world i guess",
-                user: "currentUser",
-                points: this.points,
-                sub: "something"
+        data: () => ({
+            subName: "something",
+            replyMsg: "",
+            upvoted: false,
+            downvoted: false,
+            collapseAll: false,
+            comments: [
+                {
+                    user: "TestUser",
+                    msg: "Yes",
+                    points: 5,
+                    children: [
+                        {
+                            user: "UserTest",
+                            msg: "No",
+                            points: 1,
+                            children: [
+                                {
+                                    user: "AnotherTest",
+                                    msg: "wedfbiskd",
+                                    points: -1,
+                                    children: []
+                                }
+                            ]
+                        },
+                        {
+                            user: "mm",
+                            msg: "pp",
+                            points: 0,
+                            children: []
+                        }
+                    ]
+                }
+            ]
+        }),
+        methods: {
+            reply () {
+                if (!this.replyMsg || this.replyMsg.trim() == "") return
+                this.comments.unshift({
+                    user: "currentUser",
+                    msg: this.replyMsg.trim(),
+                    children: [],
+                    points: 0,
+                })
+                this.replyMsg = ""
+            },
+            upvote () {
+                if (this.upvoted) this.upvoted = false
+                else {
+                    this.upvoted = true
+                    this.downvoted = false
+                }
+            },
+            downvote () {
+                if (this.downvoted) this.downvoted = false
+                else {
+                    this.downvoted = true
+                    this.upvoted = false
+                }
+            },
+            collapseComments () {
+                this.collapseAll = !this.collapseAll
             }
         },
-    },
-}
+        computed: {
+            voteState: function () {
+                if (this.downvoted && !this.upvoted) return 1
+                if (this.upvoted && !this.downvoted) return 2
+                else return 0
+            },
+            points: function () {
+                var point = 2042
+                if (this.voteState == 1) return point - 1
+                if (this.voteState == 2) return point + 1
+                else return point
+            },
+            upArrowColor: function () {
+                if (this.upvoted) return constants.COLOR_UPVOTE
+                else return "black"
+            },
+            downArrowColor: function () {
+                if (this.downvoted) return constants.COLOR_DOWNVOTE
+                else return "black"
+            },
+            listing: function () {
+                return {
+                    title: "history of the world i guess",
+                    user: "currentUser",
+                    points: this.points,
+                    sub: "something"
+                }
+            },
+        },
+    }
 </script>
 
 <style scoped>

@@ -13,14 +13,14 @@
 </template>
 
 <script>
-export default {
-    name: "CreateSub",
-    data: () => ({
-        subName: "something",
-        threadTitle: "",
-        threadBody: "",
-    })
-}
+    export default {
+        name: "CreateSub",
+        data: () => ({
+            subName: "something",
+            threadTitle: "",
+            threadBody: "",
+        })
+    }
 </script>
 
 <style scoped>

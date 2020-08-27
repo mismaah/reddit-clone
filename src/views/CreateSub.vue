@@ -6,12 +6,12 @@
 </template>
 
 <script>
-export default {
-    name: "CreateSub",
-    data: () => ({
-        subName: "",
-    })
-}
+    export default {
+        name: "CreateSub",
+        data: () => ({
+            subName: "",
+        })
+    }
 </script>
 
 <style scoped>
