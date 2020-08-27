@@ -7,7 +7,7 @@
                 <router-link to="/thread">THREAD</router-link>
             </span>
             <span v-if="isLoggedIn" class="navright">
-                {{username}} - 
+                <a class="user">{{username}}</a> - 
                 <a class="logoutBtn" @click="logout()">LOGOUT</a>
             </span>
             <span v-else class="navright">
@@ -61,21 +61,24 @@ body {
     display: flex;
     justify-content: space-between;
 }
-#nav a, #nav a:hover, #nav a:focus, #nav a:active {
-    text-decoration: none;
-    color: inherit;
-}
 .navleft {
     padding-left: 10px;
 }
+.navleft a, .navleft a:hover, .navleft a:focus, .navleft a:active {
+    text-decoration: none;
+    color: inherit;
+}
 .navright {
+    display: flex;
     padding-right: 10px;
+    white-space: pre;
 }
 .user {
     font-size: 11px;
     font-weight: bold;
     vertical-align: middle;
     color: darkcyan;
+    cursor: pointer;
 }
 .divider {
     border: 0.5px solid #000000;
