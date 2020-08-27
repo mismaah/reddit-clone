@@ -15,7 +15,7 @@
                 <router-link to="/register">REGISTER</router-link>
             </span>
         </div>
-        <router-view id="routerview"/>
+        <router-view :key="$route.fullPath" id="routerview"/>
     </div>
 </template>
 
@@ -104,6 +104,7 @@ body {
     font-weight: bold;
     vertical-align: middle;
     color: darkslateblue;
+    cursor: pointer;
 }
 .logoutBtn {
     cursor: pointer;
