@@ -2,10 +2,10 @@
     <div>
         <span class="header">
             <p class="title">r/{{subName}}</p>
-            <p class="headerBtn" v-if="this.$store.getters.isLoggedIn && subExists"><router-link to="/createthread">create thread</router-link></p>
+            <p class="headerBtn" v-if="this.$store.getters.isLoggedIn && !error"><router-link to="/createthread">create thread</router-link></p>
         </span>
         <div class="divider"></div>
-        <p v-if="!subExists">Sub does not exist.</p>
+        <p v-if="error">Sub does not exist.</p>
         <Listing v-for="listing in listings" :listing="listing" :parentSub="subName" :key="listing.title"></Listing>
     </div>
 </template>
@@ -21,7 +21,7 @@
             Listing
         },
         data: () => ({
-            subExists: true,
+            error: null,
             listings: [
                 {
                     title: "history of the world i guess",
@@ -60,15 +60,17 @@
                 })
                     .then(resp => {
                         if (resp.ok) {
-                            this.subExists = true
-                            console.log("SUCC")
+                            this.error = null
+                            return resp.json()
                         } else {
-                            this.subExists = false
-                            return resp.text()
+                            throw new Error(resp.statusText)
                         }
                     })
                     .then(result => {
                         console.log(result)
+                    })
+                    .catch(error => {
+                        this.error = error
                     })
             }
         },
