@@ -2,7 +2,8 @@
     <div class="centered">
         <input class="item" placeholder="Enter username" v-model="username" type="text">
         <input class="item" placeholder="Enter password" v-model="password" type="password">
-        <button class="item">Login</button>
+        <button @click="login()" class="item">Login</button>
+        <p class="error" v-if="error">{{error}}</p>
     </div>
 </template>
 
@@ -12,7 +13,24 @@
         data: () => ({
             username: "",
             password: "",
-        })
+            error: null,
+        }),
+        methods: {
+            login () {
+                this.error = null
+                this.$store.dispatch("login", {
+                    username: this.username,
+                    password: this.password,
+                    email: this.email
+                })
+                    .then(() => {
+                        this.$router.push('/')
+                    })
+                    .catch(error => {
+                        this.error = error
+                    })
+            }
+        }
     }
 </script>
 
@@ -25,6 +43,11 @@
 }
 .item {
     margin: 5px;
+}
+.error {
+    margin: 0px;
+    font-size: 12px;
+    color: red;
 }
 input {
     margin-right: 10px;

@@ -6,7 +6,11 @@
                 <router-link to="/sub">SUB</router-link> - 
                 <router-link to="/thread">THREAD</router-link>
             </span>
-            <span class="navright">
+            <span v-if="isLoggedIn" class="navright">
+                {{username}} - 
+                <a class="logoutBtn" @click="logout()">LOGOUT</a>
+            </span>
+            <span v-else class="navright">
                 <router-link to="/login">LOGIN</router-link> - 
                 <router-link to="/register">REGISTER</router-link>
             </span>
@@ -14,6 +18,23 @@
         <router-view id="routerview"/>
     </div>
 </template>
+
+<script>
+    export default {
+        methods: {
+            logout: function () {
+                this.$store.dispatch('logout')
+                    .then(() => {
+                        this.$router.push('/')
+                    })
+            },
+        },
+        computed : {
+            isLoggedIn : function(){return this.$store.getters.isLoggedIn},
+            username: function(){return this.$store.getters.getCurrentUser}
+        },
+    }
+</script>
 
 <style>
 body {
@@ -83,5 +104,8 @@ body {
     font-weight: bold;
     vertical-align: middle;
     color: darkslateblue;
+}
+.logoutBtn {
+    cursor: pointer;
 }
 </style>
