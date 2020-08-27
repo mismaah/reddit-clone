@@ -2,9 +2,10 @@
     <div>
         <span class="header">
             <p class="title">r/{{subName}}</p>
-            <p class="headerBtn" v-if="this.$store.getters.isLoggedIn"><router-link to="/createthread">create thread</router-link></p>
+            <p class="headerBtn" v-if="this.$store.getters.isLoggedIn && subExists"><router-link to="/createthread">create thread</router-link></p>
         </span>
         <div class="divider"></div>
+        <p v-if="!subExists">Sub does not exist.</p>
         <Listing v-for="listing in listings" :listing="listing" :parentSub="subName" :key="listing.title"></Listing>
     </div>
 </template>
@@ -13,11 +14,14 @@
     import Listing from '@/components/Listing.vue'
     export default {
         name: 'Sub',
+        props: {
+            subName: String,
+        },
         components: {
             Listing
         },
         data: () => ({
-            subName: "something",
+            subExists: true,
             listings: [
                 {
                     title: "history of the world i guess",
@@ -44,7 +48,33 @@
                     sub: "something"
                 },
             ]
-        })
+        }),
+        methods: {
+            getSubData () {
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getsubdata/${this.subName}`, {
+                    method: 'get',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(resp => {
+                        if (resp.ok) {
+                            this.subExists = true
+                            console.log("SUCC")
+                        } else {
+                            this.subExists = false
+                            return resp.text()
+                        }
+                    })
+                    .then(result => {
+                        console.log(result)
+                    })
+            }
+        },
+        mounted () {
+            this.getSubData()
+        }
     }
 </script>
 
