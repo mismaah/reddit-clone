@@ -9,6 +9,7 @@
             <button @click="clearErrors();clearFields()" class="item">Clear</button>
         </span>
         <p class="error" v-for="error in errors" :key="error">{{error}}</p>
+        <p class="success" v-if="success">Successfully registered.</p>
     </div>
 </template>
 
@@ -21,19 +22,18 @@
             password: "",
             passwordRe: "",
             email: "",
-            errors: []
+            errors: [],
+            success: false
         }),
         methods: {
             register () {
                 this.clearErrors()
                 if (!this.validate()) return
-                this.clearFields()
-                var user = {
+                let user = {
                     Username: this.username,
                     Password: this.password,
                     Email: this.email
                 }
-                console.log(process.env.VUE_APP_BASE_URL)
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/register`, {
                     method: 'post',
                     headers: {
@@ -42,6 +42,17 @@
                     },
                     body: JSON.stringify(user)
                 })
+                    .then(resp => {
+                        if (resp.ok) {
+                            this.clearFields()
+                            this.success = true
+                        } else {
+                            return resp.text()
+                        }
+                    })
+                    .then(result => {
+                        this.errors.push(result)
+                    })
             },
             validate () {
                 var valid = true
@@ -94,6 +105,11 @@
     margin: 0px;
     font-size: 12px;
     color: red;
+}
+.success {
+    margin: 0px;
+    font-size: 12px;
+    color: darkcyan;
 }
 input {
     margin-right: 10px;
