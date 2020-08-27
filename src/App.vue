@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <div id="nav">
-            <span class="navleft">
+            <span class="navleft plain">
                 <router-link to="/">HOME</router-link> - 
                 <router-link to="/sub">SUB</router-link> - 
                 <router-link to="/thread">THREAD</router-link>
@@ -10,7 +10,7 @@
                 <a class="user">{{username}}</a> - 
                 <a class="logoutBtn" @click="logout()">LOGOUT</a>
             </span>
-            <span v-else class="navright">
+            <span v-else class="navright plain">
                 <router-link to="/login">LOGIN</router-link> - 
                 <router-link to="/register">REGISTER</router-link>
             </span>
@@ -64,7 +64,7 @@ body {
 .navleft {
     padding-left: 10px;
 }
-.navleft a, .navleft a:hover, .navleft a:focus, .navleft a:active {
+.plain a, .plain a:hover, .plain a:focus, .plain a:active {
     text-decoration: none;
     color: inherit;
 }
