@@ -5,7 +5,16 @@
             <p class="headerBtn" v-if="this.$store.getters.isLoggedIn"><router-link to="/createsub">create sub</router-link></p>
         </span>
         <div class="divider"></div>
-        <Listing v-for="listing in listings" :listing="listing" parentSub="home" :key="listing.title"></Listing>
+        <p v-if="error">Failed to load.</p>
+        <div v-else class="homeDiv">
+            <div>
+                <Listing v-for="listing in listings" :listing="listing" parentSub="home" :key="listing.title"></Listing>
+            </div>
+            <div class="subList">
+                <p class="subListHeader">All subs</p>
+                <span class="subName" v-for="sub in subs" :key="sub" @click="goToSub(sub)">r/{{sub}}</span>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -60,8 +69,40 @@
                     points: 2185,
                     sub: "something"
                 },
-            ]
-        })
+            ],
+            subs: [],
+            error: false,
+        }),
+        methods: {
+            getData () {
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/home/`, {
+                    method: 'get',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(resp => {
+                        if (!resp.ok) {
+                            throw new Error(resp.statusText)
+                        } else {
+                            return resp.json()
+                        }
+                    })
+                    .then(result => {
+                        this.subs = result
+                    })
+                    .catch(error => {
+                        this.error = error
+                    })
+            },
+            goToSub (subName) {
+                this.$router.push(`/r/${subName}`)
+            }
+        },
+        mounted () {
+            this.getData()
+        }
     }
 </script>
 
@@ -91,5 +132,23 @@
 a, a:hover, a:focus, a:active {
       text-decoration: none;
       color: inherit;
+}
+.homeDiv {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.subList {
+    margin-right: 50px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    border-radius: 10px;
+    background-color: rgb(202, 202, 202);
+}
+.subListHeader {
+    margin-top: 0px;
+    margin-bottom: 5px;
 }
 </style>
