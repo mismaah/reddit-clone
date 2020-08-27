@@ -27,9 +27,9 @@ const routes = [
         component: Register
     },
     {
-        path: '/sub',
-        name: 'Sub',
-        component: Sub
+        path: '/r/:subName',
+        component: Sub,
+        props: true
     },
     {
         path: '/thread',
