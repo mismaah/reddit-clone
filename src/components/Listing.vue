@@ -6,11 +6,11 @@
             <i v-if="this.$store.getters.isLoggedIn" @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
         </span>
         <span class="textArea">
-            <span>{{listing.title}}</span>
+            <span>{{listing.threadTitle}}</span>
             <span class="subtitle">
-                <span class="user">{{listing.user}} </span>
+                <span class="user">{{listing.createdBy}} </span>
                 <span v-if="!inSub">to </span>
-                <span v-if="!inSub" class="subName">r/{{listing.sub}}</span>
+                <span v-if="!inSub" class="subName">r/{{listing.subName}}</span>
             </span>
         </span>
     </div>
@@ -65,7 +65,7 @@
                 else return "black"
             },
             inSub: function () {
-                if (this.parentSub == this.listing.sub) return true
+                if (this.parentSub == this.listing.subName) return true
                 else return false
             }
         },
