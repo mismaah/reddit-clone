@@ -5,7 +5,7 @@
             <p class="headerBtn" v-if="this.$store.getters.isLoggedIn"><router-link to="/createsub">create sub</router-link></p>
         </span>
         <div class="divider"></div>
-        <p v-if="error">Failed to load.</p>
+        <p v-if="error">{{error}}</p>
         <div v-else class="homeDiv">
             <div>
                 <Listing v-for="listing in listings" :listing="listing" parentSub="home" :key="listing.title"></Listing>
@@ -71,7 +71,7 @@
                 },
             ],
             subs: [],
-            error: false,
+            error: null,
         }),
         methods: {
             getData () {
@@ -84,16 +84,16 @@
                 })
                     .then(resp => {
                         if (!resp.ok) {
-                            throw new Error(resp.statusText)
+                            return resp.text()
+                                .then(error => {
+                                    this.error = error
+                                })
                         } else {
                             return resp.json()
+                                .then(result => {
+                                    this.subs = result
+                                })
                         }
-                    })
-                    .then(result => {
-                        this.subs = result
-                    })
-                    .catch(error => {
-                        this.error = error
                     })
             },
             goToSub (subName) {

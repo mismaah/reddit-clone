@@ -44,14 +44,16 @@
                 })
                     .then(resp => {
                         if (resp.ok) {
-                            console.log("SUCC")
-                            // this.$router.push(`/r/${this.subname}`)
+                            return resp.json()
+                                .then(json => {
+                                    console.log(json)
+                                })
                         } else {
                             return resp.text()
+                                .then(result => {
+                                    this.error = result
+                                })
                         }
-                    })
-                    .then(result => {
-                        this.error = result
                     })
             }
         }
