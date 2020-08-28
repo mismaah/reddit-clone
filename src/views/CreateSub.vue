@@ -20,8 +20,8 @@
                 this.error = null
                 if (this.subname == "") return
                 let createSub = {
-                    Subname: this.subname,
-                    CreatedBy: this.$store.getters.getCurrentUser
+                    subName: this.subname,
+                    createdBy: this.$store.getters.getCurrentUser
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/createsub`, {
                     method: 'post',

@@ -30,9 +30,9 @@
                 this.clearErrors()
                 if (!this.validate()) return
                 let user = {
-                    Username: this.username,
-                    Password: this.password,
-                    Email: this.email
+                    username: this.username,
+                    password: this.password,
+                    email: this.email
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/register`, {
                     method: 'post',
