@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store/store.js'
 import Thread from '../views/Thread.vue'
 import Sub from '../views/Sub.vue'
 import Home from '../views/Home.vue'
@@ -29,7 +30,7 @@ const routes = [
     {
         path: '/r/:subName',
         component: Sub,
-        props: true
+        props: true,
     },
     {
         path: '/thread',
@@ -42,14 +43,27 @@ const routes = [
         component: CreateSub
     },
     {
-        path: '/createthread',
+        path: '/r/:subName/createthread',
         name: 'Create Thread',
-        component: CreateThread
+        component: CreateThread,
+        props: true,
     },
 ]
 
 const router = new VueRouter({
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    if(to.matched.some(record => record.meta.requiresAuth)) {
+      if (store.getters.isLoggedIn) {
+        next()
+        return
+      }
+      next('/') 
+    } else {
+      next() 
+    }
 })
 
 export default router
