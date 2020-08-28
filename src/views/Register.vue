@@ -27,6 +27,7 @@
         }),
         methods: {
             register () {
+                this.success = false
                 this.clearErrors()
                 if (!this.validate()) return
                 let user = {
