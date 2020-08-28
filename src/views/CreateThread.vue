@@ -17,7 +17,8 @@
     export default {
         name: "CreateSub",
         props: {
-            subName: String
+            subName: String,
+            threadID: String,
         },
         data: () => ({
             threadTitle: "",
@@ -45,8 +46,8 @@
                     .then(resp => {
                         if (resp.ok) {
                             return resp.json()
-                                .then(json => {
-                                    console.log(json)
+                                .then(threadID => {
+                                    this.$router.push({name: 'Thread', params: {subName: this.subName, threadID: threadID}})
                                 })
                         } else {
                             return resp.text()

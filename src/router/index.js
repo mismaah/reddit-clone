@@ -33,9 +33,10 @@ const routes = [
         props: true,
     },
     {
-        path: '/thread',
+        path: '/r/:subName/:threadID',
         name: 'Thread',
-        component: Thread
+        component: Thread,
+        props: true,
     },
     {
         path: '/createsub',
