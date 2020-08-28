@@ -6,11 +6,11 @@
             <i v-if="this.$store.getters.isLoggedIn" @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
         </span>
         <span class="textArea">
-            <span>{{listing.threadTitle}}</span>
+            <span @click="goToThread(listing)" class="listingTitle">{{listing.threadTitle}}</span>
             <span class="subtitle">
                 <span class="user">{{listing.createdBy}} </span>
                 <span v-if="!inSub">to </span>
-                <span v-if="!inSub" class="subName">r/{{listing.subName}}</span>
+                <span v-if="!inSub" class="subName" @click="goToSub(listing)">r/{{listing.subName}}</span>
             </span>
         </span>
     </div>
@@ -42,6 +42,12 @@
                     this.downvoted = true
                     this.upvoted = false
                 }
+            },
+            goToThread(listing){
+                this.$router.push({name: 'Thread', params: {subName: listing.subName, threadID: listing.ID}})
+            },
+            goToSub(listing){
+                this.$router.push(`/r/${listing.subName}`)
             }
         },
         computed: {
@@ -96,6 +102,9 @@
 }
 .textArea {
     text-align: left;
+}
+.listingTitle {
+    cursor: pointer;
 }
 .subtitle {
     display: flex;
