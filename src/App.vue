@@ -2,9 +2,7 @@
     <div id="app">
         <div id="nav">
             <span class="navleft plain">
-                <router-link to="/">HOME</router-link> - 
-                <router-link to="/sub">SUB</router-link> - 
-                <router-link to="/thread">THREAD</router-link>
+                <router-link to="/">HOME</router-link>
             </span>
             <span v-if="isLoggedIn" class="navright">
                 <a class="user">{{username}}</a> - 
