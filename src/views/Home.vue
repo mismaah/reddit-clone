@@ -74,7 +74,7 @@
             error: null,
         }),
         methods: {
-            getData () {
+            getAllSubs () {
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/home/`, {
                     method: 'get',
                     headers: {
@@ -96,12 +96,35 @@
                         }
                     })
             },
+            getAllThreads () {
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/home`, {
+                    method: 'get',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(resp => {
+                        if (!resp.ok) {
+                            return resp.text()
+                                .then(error => {
+                                    this.error = error
+                                })
+                        } else {
+                            return resp.json()
+                                .then(result => {
+                                    this.listings = result
+                                })
+                        }
+                    })
+            },
             goToSub (subName) {
                 this.$router.push(`/r/${subName}`)
             }
         },
         mounted () {
-            this.getData()
+            this.getAllSubs()
+            this.getAllThreads()
         }
     }
 </script>
