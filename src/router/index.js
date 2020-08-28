@@ -40,13 +40,19 @@ const routes = [
     {
         path: '/createsub',
         name: 'Create Sub',
-        component: CreateSub
+        component: CreateSub,
+        meta: { 
+            requiresAuth: true
+        }
     },
     {
         path: '/r/:subName/createthread',
         name: 'Create Thread',
         component: CreateThread,
         props: true,
+        meta: { 
+            requiresAuth: true
+        }
     },
 ]
 
