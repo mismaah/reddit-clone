@@ -97,7 +97,7 @@
                     })
             },
             getAllThreads () {
-                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/home`, {
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/home/na`, {
                     method: 'get',
                     headers: {
                         'Accept': 'application/json',

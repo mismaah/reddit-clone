@@ -51,7 +51,7 @@
         }),
         methods: {
             getSubData () {
-                fetch(`${process.env.VUE_APP_BASE_URL}/api/getsubdata/${this.subName}`, {
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/sub/${this.subName}`, {
                     method: 'get',
                     headers: {
                         'Accept': 'application/json',
@@ -59,18 +59,17 @@
                     }
                 })
                     .then(resp => {
-                        if (resp.ok) {
-                            this.error = null
-                            return resp.json()
+                        if (!resp.ok) {
+                            return resp.text()
+                                .then(error => {
+                                    this.error = error
+                                })
                         } else {
-                            throw new Error(resp.statusText)
+                            return resp.json()
+                                .then(result => {
+                                    this.listings = result
+                                })
                         }
-                    })
-                    .then(result => {
-                        console.log(result)
-                    })
-                    .catch(error => {
-                        this.error = error
                     })
             },
             createThread () {

@@ -2,16 +2,16 @@
     <div>
         <p class="sub">r/{{subName}}</p>
         <div class="divider"></div>
-        <Listing :listing="listing" :parentSub="subName">{{listing.title}}</Listing>
-        <div class="box">
-            <p>haiti is starting to like the idea of a revolution, especially the slaves, who free themselves by killing their masters. "why didn't we think of this before?" wait, who's in charge of france now? "me," said napoleon, trying to take over europe. luckily, they banished him to an island. but he came back! luckily, they banished him to another island. there goes latin america, becoming independent in the latin american wars of independence. britain just figured out how to turn steam into power, so now they can make many different types of machines and factories with machines in them so they can make a lot of products real fast. then they invent some trains. and conquer india and maybe put some trains there. "hey, china!" said britain. "buy stuff from us!" "nah, dude, we already got everything," says china. so britain tried to get them addicted to opium, which worked, actually. but then china made it illegal and dumped it all into the sea. so britain threw a hissy fit and made them open up five cities and give them an island. britain and russia are playing a game where they try to stop the other person from conquering afghanistan. also, the sultan of oman lives in zanzibar now: "that's just where he lives." india just had a revolution, and they would like to govern themselves now. "nope," said britain, governing them even harder than before. incoming telegram: HI I JUST SENT YOU A MESSAGE THRU A WIRE technology is about to go crazy!
-            </p>
+        <p v-if="error">Thread does not exist.</p>
+        <Listing v-if="listing" :listing="listing" :parentSub="subName">{{listing.title}}</Listing>
+        <div class="box" v-if="listing">
+            <p>{{listing.threadBody}}</p>
         </div>
-        <div class="threadUtil">
+        <div class="threadUtil" v-if="listing">
             <p v-if="collapseAll" class="utilBtn" @click="collapseComments()" >expand all comments</p>
             <p v-else class="utilBtn" @click="collapseComments()" >collapse all comments</p>
         </div>
-        <div v-if="this.$store.getters.isLoggedIn">
+        <div v-if="this.$store.getters.isLoggedIn && listing">
             <textarea v-model="replyMsg" rows="3" placeholder="Reply to thread"></textarea>
             <br>
             <button @click="reply">Submit</button>
@@ -26,12 +26,17 @@
     import Listing from '@/components/Listing.vue'
     export default {
         name: 'Thread',
+        props: {
+            subName: String,
+            threadID: String
+        },
         components: {
             Comment,
             Listing
         },
         data: () => ({
-            subName: "something",
+            listing: null,
+            error: null,
             replyMsg: "",
             upvoted: false,
             downvoted: false,
@@ -92,6 +97,28 @@
             },
             collapseComments () {
                 this.collapseAll = !this.collapseAll
+            },
+            getListingData () {
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/thread/${this.threadID}`, {
+                    method: 'get',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(resp => {
+                        if (!resp.ok) {
+                            return resp.text()
+                                .then(error => {
+                                    this.error = error
+                                })
+                        } else {
+                            return resp.json()
+                                .then(result => {
+                                    this.listing = result
+                                })
+                        }
+                    })
             }
         },
         computed: {
@@ -114,15 +141,10 @@
                 if (this.downvoted) return constants.COLOR_DOWNVOTE
                 else return "black"
             },
-            listing: function () {
-                return {
-                    title: "history of the world i guess",
-                    user: "currentUser",
-                    points: this.points,
-                    sub: "something"
-                }
-            },
         },
+        mounted () {
+            this.getListingData()
+        }
     }
 </script>
 
