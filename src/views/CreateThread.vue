@@ -15,8 +15,10 @@
 <script>
     export default {
         name: "CreateSub",
+        props: {
+            subName: String
+        },
         data: () => ({
-            subName: "something",
             threadTitle: "",
             threadBody: "",
         })

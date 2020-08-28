@@ -2,7 +2,7 @@
     <div>
         <span class="header">
             <p class="title">r/{{subName}}</p>
-            <p class="headerBtn" v-if="this.$store.getters.isLoggedIn && !error"><router-link to="/createthread">create thread</router-link></p>
+            <p class="headerBtn" v-if="this.$store.getters.isLoggedIn && !error"><a @click="createThread()">create thread</a></p>
         </span>
         <div class="divider"></div>
         <p v-if="error">Sub does not exist.</p>
@@ -72,6 +72,9 @@
                     .catch(error => {
                         this.error = error
                     })
+            },
+            createThread () {
+                this.$router.push({name: 'Create Thread', params: {subName: this.subName}})
             }
         },
         mounted () {
