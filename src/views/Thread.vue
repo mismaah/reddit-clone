@@ -1,10 +1,10 @@
 <template>
     <div>
-        <p class="sub">r/{{subName}}</p>
+        <p class="sub" @click="goToSub()">r/{{subName}}</p>
         <div class="divider"></div>
         <p v-if="error">Thread does not exist.</p>
         <Listing v-if="listing" :listing="listing" :parentSub="subName">{{listing.title}}</Listing>
-        <div class="box" v-if="listing">
+        <div class="box" v-if="listing && listing.threadBody">
             <p>{{listing.threadBody}}</p>
         </div>
         <div class="threadUtil" v-if="listing">
@@ -98,6 +98,9 @@
             collapseComments () {
                 this.collapseAll = !this.collapseAll
             },
+            goToSub () {
+                this.$router.push(`/r/${this.subName}`)
+            },
             getListingData () {
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/thread/${this.threadID}`, {
                     method: 'get',
@@ -156,6 +159,7 @@
     margin-top: 0px;
     margin-bottom: 0px;
     margin-left: 50px;
+    cursor: pointer;
 }
 .box {
     border-radius: 20px;
