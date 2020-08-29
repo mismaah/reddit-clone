@@ -20,12 +20,13 @@
             
         </div>
         <div v-show="replyTextBox" class="replyBox">
-            <input ref="replyInput" @keypress.enter="submitReply()" @keydown.esc="replyTextBox = null" v-model="replyMsg" placeholder="Reply to comment">
+            <input ref="replyInput" @keypress.enter="submitReply()" @keydown.esc="replyTextBox = null" v-model="body" placeholder="Reply to comment">
             <i @click="submitReply()" title="Submit" class="material-icons replyCommands">send</i>
             <i @click="replyTextBox = null" title="Cancel" class="material-icons replyCommands">cancel</i>
+            <p class="error" v-if="errorReply">{{errorReply}}</p>
         </div>
         <p class="childCount" v-show="collapsed && totalChildCount > 0">{{totalChildCount}} child <span v-if="totalChildCount == 1">comment</span><span v-else>comments</span></p>
-        <Comment v-show="!collapsed" v-for="comment in children" :comment="comment" :key="comment.body"></Comment>
+        <Comment v-show="!collapsed" v-for="comment in children" :comment="comment" :key="comment.ID"></Comment>
     </div>
 </template>
 
@@ -44,7 +45,8 @@
         data: () => ({
             children: [],
             replyTextBox: null,
-            replyMsg: "",
+            body: "",
+            errorReply: null,
             collapsed: false,
             totalChildCount: 0,
             upvoted: false,
@@ -58,19 +60,43 @@
                 })
             },
             submitReply () {
-                if (!this.replyMsg || this.replyMsg.trim() == "") return
-                this.children.unshift({
-                    user: this.$store.getters.getCurrentUser,
-                    msg: this.replyMsg.trim(),
-                    children: [],
-                    points: 0,
+                this.errorReply = null
+                if (!this.body || this.body.trim() == "") return
+                let comment = {
+                    body: this.body,
+                    username: this.$store.getters.getCurrentUser,
+                    threadID: this.comment.threadID,
+                    subName: this.comment.subName,
+                    parent: this.comment.ID
+                }
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/createcomment`, {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(comment)
                 })
-                this.replyMsg = ""
-                this.replyTextBox = null
+                    .then(resp => {
+                        if (resp.ok) {
+                            return resp.json()
+                                .then(comment => {
+                                    this.children.unshift(comment)
+                                    this.body = ""
+                                    this.replyTextBox = null
+                                })
+                        } else {
+                            return resp.text()
+                                .then(result => {
+                                    this.errorReply = result
+                                })
+                        }
+                    })
             },
             countChildComments (children) {
-                var total = (children || children.length > 0) ? children.length : 0
-                if (children.length > 0) {
+                var total = 0
+                if (children) {
+                    total = children.length
                     for (var i of children) {
                         total += this.countChildComments(i.children)
                     }
@@ -96,7 +122,7 @@
             }
         },
         mounted () {
-            this.children = this.$props.comment.children
+            if (this.comment.children) this.children = this.comment.children
         },
         computed: {
             voteState: function () {
@@ -190,5 +216,10 @@
 }
 .replyBox {
     display: flex;
+}
+.error {
+    margin: 0px;
+    font-size: 12px;
+    color: red;
 }
 </style>
