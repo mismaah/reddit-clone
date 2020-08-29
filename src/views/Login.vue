@@ -24,7 +24,8 @@
                     email: this.email
                 })
                     .then(() => {
-                        this.$router.go(-1)
+                        if (localStorage.getItem('prevRoute') == 'Register') this.$router.go(-2)
+                        else this.$router.go(-1)
                     })
                     .catch(error => {
                         this.error = error

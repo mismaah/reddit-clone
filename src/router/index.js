@@ -62,6 +62,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+    localStorage.setItem('prevRoute', from.name)
     if(to.matched.some(record => record.meta.requiresAuth)) {
       if (store.getters.isLoggedIn) {
         next()
