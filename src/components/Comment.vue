@@ -143,6 +143,7 @@
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 0px;
+    margin-top: 5px;    
     margin-bottom: 1px;
     margin-left: 20px;
     text-align: left;
