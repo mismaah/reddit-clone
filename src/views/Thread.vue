@@ -17,7 +17,8 @@
             <button @click="reply">Submit</button>
             <p class="error" v-if="errorReply">{{errorReply}}</p>
         </div>
-        <Comment v-for="comment in comments" :comment="comment" :collapseAll="collapseAll" :key="comment.body"></Comment>
+        <p v-if="errorComments">{{errorComments}}</p>
+        <Comment v-for="comment in comments" :comment="comment" :collapseAll="collapseAll" :key="comment.ID"></Comment>
     </div>
 </template>
 
@@ -41,37 +42,9 @@
             error: null,
             body: "",
             errorReply: null,
-            upvoted: false,
-            downvoted: false,
+            errorComments: null,
             collapseAll: false,
-            comments: [
-                {
-                    username: "TestUser",
-                    body: "Yes",
-                    points: 5,
-                    children: [
-                        {
-                            username: "UserTest",
-                            body: "No",
-                            points: 1,
-                            children: [
-                                {
-                                    username: "AnotherTest",
-                                    body: "wedfbiskd",
-                                    points: -1,
-                                    children: []
-                                }
-                            ]
-                        },
-                        {
-                            username: "mm",
-                            body: "pp",
-                            points: 0,
-                            children: []
-                        }
-                    ]
-                }
-            ]
+            comments: []
         }),
         methods: {
             reply () {
@@ -106,20 +79,6 @@
                         }
                     })
             },
-            upvote () {
-                if (this.upvoted) this.upvoted = false
-                else {
-                    this.upvoted = true
-                    this.downvoted = false
-                }
-            },
-            downvote () {
-                if (this.downvoted) this.downvoted = false
-                else {
-                    this.downvoted = true
-                    this.upvoted = false
-                }
-            },
             collapseComments () {
                 this.collapseAll = !this.collapseAll
             },
@@ -147,31 +106,33 @@
                                 })
                         }
                     })
+            },
+            getCommentData () {
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getcommentdata/thread/${this.threadID}`, {
+                    method: 'get',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(resp => {
+                        if (!resp.ok) {
+                            return resp.text()
+                                .then(error => {
+                                    this.errorComments = error
+                                })
+                        } else {
+                            return resp.json()
+                                .then(comments => {
+                                    if (comments) this.comments = comments
+                                })
+                        }
+                    })
             }
-        },
-        computed: {
-            voteState: function () {
-                if (this.downvoted && !this.upvoted) return 1
-                if (this.upvoted && !this.downvoted) return 2
-                else return 0
-            },
-            points: function () {
-                var point = 2042
-                if (this.voteState == 1) return point - 1
-                if (this.voteState == 2) return point + 1
-                else return point
-            },
-            upArrowColor: function () {
-                if (this.upvoted) return constants.COLOR_UPVOTE
-                else return "black"
-            },
-            downArrowColor: function () {
-                if (this.downvoted) return constants.COLOR_DOWNVOTE
-                else return "black"
-            },
         },
         mounted () {
             this.getListingData()
+            this.getCommentData()
         }
     }
 </script>
@@ -193,16 +154,6 @@
     padding-right: 20px;
     text-align: left;
 }
-.voteArea {
-    margin-right: 10px;
-    min-width: 50px;
-}
-.points {
-    font-size: 15px;
-    vertical-align: middle;
-    justify-self: center;
-    margin: 0px;
-}
 .header {
     display: flex;
     flex-direction: row;
@@ -213,9 +164,6 @@
 }
 .textArea {
     align-items: flex-start;
-}
-.voteArrow {
-    margin: -5px;
 }
 .threadUtil {
     display: flex;
