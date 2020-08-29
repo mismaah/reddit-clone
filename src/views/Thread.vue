@@ -23,7 +23,6 @@
 </template>
 
 <script>
-    import {constants} from '@/constants.js'
     import Comment from '@/components/Comment.vue'
     import Listing from '@/components/Listing.vue'
     export default {
