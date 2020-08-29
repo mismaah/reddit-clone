@@ -12,6 +12,9 @@
                 <span v-if="!inSub">to </span>
                 <span v-if="!inSub" class="subName" @click="goToSub(listing)">r/{{listing.subName}}</span>
             </span>
+            <span class="commentCount" v-if="listing.commentCount">
+                {{listing.commentCount}} <span v-if="listing.commentCount==1">comment</span> <span v-else>comments</span>
+            </span>
         </span>
     </div>
 </template>
@@ -112,5 +115,9 @@
     font-size: 11px;
     vertical-align: middle;
     white-space: pre;
+}
+.commentCount {
+    font-size: 10px;
+    font-weight: 500;
 }
 </style>
