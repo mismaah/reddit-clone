@@ -24,7 +24,7 @@
                     email: this.email
                 })
                     .then(() => {
-                        this.$router.push('/')
+                        this.$router.go(-1)
                     })
                     .catch(error => {
                         this.error = error
