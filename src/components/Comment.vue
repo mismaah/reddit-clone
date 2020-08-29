@@ -3,7 +3,7 @@
         <div>
             <i v-if="!collapsed" @click="collapse()" title="Hide child comments" class="material-icons collapseBtn">remove</i>
             <i v-else @click="collapse()" title="Show child comments" class="material-icons collapseBtn">add</i>
-            <span class="user">{{comment.user}} </span>
+            <span class="user">{{comment.username}} </span>
             <span class="points"> {{points}} <span v-if="points == 1">point</span><span v-else>points</span></span>
         </div>
         <div v-show="!collapsed">
@@ -13,7 +13,7 @@
                     <i @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
                 </span>
                 <span class="textArea">
-                    <span class="msg">{{comment.msg}}</span>
+                    <span class="msg">{{comment.body}}</span>
                     <i v-if="this.$store.getters.isLoggedIn" @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
                 </span>
             </div>
@@ -25,7 +25,7 @@
             <i @click="replyTextBox = null" title="Cancel" class="material-icons replyCommands">cancel</i>
         </div>
         <p class="childCount" v-show="collapsed && totalChildCount > 0">{{totalChildCount}} child <span v-if="totalChildCount == 1">comment</span><span v-else>comments</span></p>
-        <Comment v-show="!collapsed" v-for="comment in children" :comment="comment" :key="comment.msg"></Comment>
+        <Comment v-show="!collapsed" v-for="comment in children" :comment="comment" :key="comment.body"></Comment>
     </div>
 </template>
 
@@ -69,7 +69,7 @@
                 this.replyTextBox = null
             },
             countChildComments (children) {
-                var total = (children.length > 0) ? children.length : 0
+                var total = (children || children.length > 0) ? children.length : 0
                 if (children.length > 0) {
                     for (var i of children) {
                         total += this.countChildComments(i.children)
@@ -122,7 +122,7 @@
         watch: {
             children: {
                 handler: function () {
-                    this.totalChildCount = this.countChildComments(this.children)
+                    if (this.children) this.totalChildCount = this.countChildComments(this.children)
                 },
                 deep: true
             },

@@ -12,11 +12,12 @@
             <p v-else class="utilBtn" @click="collapseComments()" >collapse all comments</p>
         </div>
         <div v-if="this.$store.getters.isLoggedIn && listing">
-            <textarea v-model="replyMsg" rows="3" placeholder="Reply to thread"></textarea>
+            <textarea v-model="body" rows="3" placeholder="Reply to thread"></textarea>
             <br>
             <button @click="reply">Submit</button>
+            <p class="error" v-if="errorReply">{{errorReply}}</p>
         </div>
-        <Comment v-for="comment in comments" :comment="comment" :collapseAll="collapseAll" :key="comment.msg"></Comment>
+        <Comment v-for="comment in comments" :comment="comment" :collapseAll="collapseAll" :key="comment.body"></Comment>
     </div>
 </template>
 
@@ -37,32 +38,33 @@
         data: () => ({
             listing: null,
             error: null,
-            replyMsg: "",
+            body: "",
+            errorReply: null,
             upvoted: false,
             downvoted: false,
             collapseAll: false,
             comments: [
                 {
-                    user: "TestUser",
-                    msg: "Yes",
+                    username: "TestUser",
+                    body: "Yes",
                     points: 5,
                     children: [
                         {
-                            user: "UserTest",
-                            msg: "No",
+                            username: "UserTest",
+                            body: "No",
                             points: 1,
                             children: [
                                 {
-                                    user: "AnotherTest",
-                                    msg: "wedfbiskd",
+                                    username: "AnotherTest",
+                                    body: "wedfbiskd",
                                     points: -1,
                                     children: []
                                 }
                             ]
                         },
                         {
-                            user: "mm",
-                            msg: "pp",
+                            username: "mm",
+                            body: "pp",
                             points: 0,
                             children: []
                         }
@@ -72,14 +74,36 @@
         }),
         methods: {
             reply () {
-                if (!this.replyMsg || this.replyMsg.trim() == "") return
-                this.comments.unshift({
-                    user: this.$store.getters.getCurrentUser,
-                    msg: this.replyMsg.trim(),
-                    children: [],
-                    points: 0,
+                this.errorReply = null
+                if (!this.body || this.body.trim() == "") return
+                let comment = {
+                    body: this.body,
+                    username: this.$store.getters.getCurrentUser,
+                    threadID: this.threadID,
+                    subName: this.subName,
+                }
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/createcomment`, {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(comment)
                 })
-                this.replyMsg = ""
+                    .then(resp => {
+                        if (resp.ok) {
+                            return resp.json()
+                                .then(comment => {
+                                    this.comments.unshift(comment)
+                                    this.body = ""
+                                })
+                        } else {
+                            return resp.text()
+                                .then(result => {
+                                    this.errorReply = result
+                                })
+                        }
+                    })
             },
             upvote () {
                 if (this.upvoted) this.upvoted = false
@@ -205,6 +229,11 @@
 }
 .utilBtn:hover {
     text-decoration: underline;
+}
+.error {
+    margin: 0px;
+    font-size: 12px;
+    color: red;
 }
 textarea {
   font-family: inherit;
