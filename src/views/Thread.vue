@@ -29,7 +29,8 @@
         name: 'Thread',
         props: {
             subName: String,
-            threadID: String
+            threadID: String,
+            url: String,
         },
         components: {
             Comment,

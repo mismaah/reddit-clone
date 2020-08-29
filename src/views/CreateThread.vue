@@ -1,7 +1,7 @@
 <template>
     <div>
         <span class="header">
-            <p class="title">r/{{subName}}</p>
+            <p class="title" @click="goToSub()">r/{{subName}}</p>
         </span>
         <div class="divider"></div>
         <div class="centered">
@@ -46,8 +46,8 @@
                     .then(resp => {
                         if (resp.ok) {
                             return resp.json()
-                                .then(threadID => {
-                                    this.$router.push({name: 'Thread', params: {subName: this.subName, threadID: threadID}})
+                                .then(resp => {
+                                    this.$router.push({name: 'Thread', params: {subName: this.subName, threadID: resp.threadID, url: resp.url}})
                                 })
                         } else {
                             return resp.text()
@@ -56,7 +56,10 @@
                                 })
                         }
                     })
-            }
+            },
+            goToSub () {
+                this.$router.push(`/r/${this.subName}`)
+            },
         }
     }
 </script>
@@ -71,6 +74,7 @@
     font-weight: bold;
     margin-bottom: 0px;
     margin-left: 50px;
+    cursor: pointer;
 }
 .centered {
     display: flex;
