@@ -8,6 +8,7 @@ import CreateSub from '../views/CreateSub.vue'
 import CreateThread from '../views/CreateThread.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import Permalink from '../views/Permalink.vue'
 
 Vue.use(VueRouter)
 
@@ -54,6 +55,12 @@ const routes = [
         meta: { 
             requiresAuth: true
         }
+    },
+    {
+        path: '/permalink/:commentID',
+        name: 'Permalink',
+        component: Permalink,
+        props: true,
     },
 ]
 

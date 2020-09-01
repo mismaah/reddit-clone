@@ -1,10 +1,11 @@
 <template>
     <div class="commentBox">
-        <div>
+        <div class="top">
             <i v-if="!collapsed" @click="collapse()" title="Hide child comments" class="material-icons collapseBtn">remove</i>
             <i v-else @click="collapse()" title="Show child comments" class="material-icons collapseBtn">add</i>
             <span class="user">{{comment.username}} </span>
             <span class="points"> {{points}} <span v-if="points == 1">point</span><span v-else>points</span></span>
+            <p class="utilBtn" @click="permalink()">permalink</p>
         </div>
         <div v-show="!collapsed">
             <div class="contents">
@@ -13,7 +14,7 @@
                     <i @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
                 </span>
                 <span class="textArea">
-                    <span class="msg">{{comment.body}}</span>
+                    <span class="body">{{comment.body}}</span>
                     <i v-if="this.$store.getters.isLoggedIn" @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
                 </span>
             </div>
@@ -53,6 +54,9 @@
             downvoted: false,
         }),
         methods: {
+            permalink () {
+                this.$router.push(`/permalink/${this.comment.ID}`)
+            },
             replyBtn () {
                 this.replyTextBox = true
                 this.$nextTick(() => {
@@ -163,6 +167,9 @@
 </script>
 
 <style scoped>
+.top {
+    display: flex;
+}
 .commentBox {
     border-left: 1px solid #bbb;
     border-bottom: 1px solid #bbb;;
@@ -177,8 +184,9 @@
 .points {
     font-size: 11px;
     vertical-align: middle;
+    margin-left: 10px;
 }
-.msg {
+.body {
     font-size: 15px;
     margin-top: 0px;
     margin-bottom: 0px;
@@ -221,5 +229,15 @@
     margin: 0px;
     font-size: 12px;
     color: red;
+}
+.utilBtn {
+    cursor: pointer;
+    margin: 0px;
+    font-size: 11px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+.utilBtn:hover {
+    text-decoration: underline;
 }
 </style>
