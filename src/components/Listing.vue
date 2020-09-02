@@ -1,9 +1,9 @@
 <template>
     <div class="contents">
         <span class="voteArea">
-            <i v-if="this.$store.getters.isLoggedIn" @click="upvote()" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
+            <i v-if="this.$store.getters.isLoggedIn" @click="vote('up')" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
             <p class="points">{{points}}</p>
-            <i v-if="this.$store.getters.isLoggedIn" @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
+            <i v-if="this.$store.getters.isLoggedIn" @click="vote('down')" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
         </span>
         <span class="textArea">
             <span @click="goToThread(listing)" class="listingTitle">{{listing.threadTitle}}</span>
@@ -28,23 +28,40 @@
             parentSub: String
         },
         data: () => ({
-            upvoted: false,
-            downvoted: false,
+            voteState: null,
+            points: null
         }),
         methods: {
-            upvote () {
-                if (this.upvoted) this.upvoted = false
-                else {
-                    this.upvoted = true
-                    this.downvoted = false
+            vote (type) {
+                let vote = {
+                    voteType: type,
+                    kind: "thread",
+                    kindID: this.listing.ID,
+                    username: this.$store.getters.getCurrentUser,
                 }
-            },
-            downvote () {
-                if (this.downvoted) this.downvoted = false
-                else {
-                    this.downvoted = true
-                    this.upvoted = false
-                }
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/createvote`, {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(vote)
+                })
+                    .then(resp => {
+                        if (resp.ok) {
+                            return resp.json()
+                                .then(resp => {
+                                    this.voteState = resp.voteState
+                                    this.points = resp.points
+
+                                })
+                        } else {
+                            return resp.text()
+                                .then(resp => {
+                                    alert(resp)
+                                })
+                        }
+                    })
             },
             goToThread(listing){
                 this.$router.push({name: 'Thread', params: {subName: listing.subName, threadID: listing.ID, url: listing.url}})
@@ -54,23 +71,12 @@
             }
         },
         computed: {
-            voteState: function () {
-                if (this.downvoted && !this.upvoted) return 1
-                if (this.upvoted && !this.downvoted) return 2
-                else return 0
-            },
-            points: function () {
-                var point = this.$props.listing.points
-                if (this.voteState == 1) return point - 1
-                if (this.voteState == 2) return point + 1
-                else return point
-            },
             upArrowColor: function () {
-                if (this.upvoted) return constants.COLOR_UPVOTE
+                if (this.voteState == "up") return constants.COLOR_UPVOTE
                 else return "black"
             },
             downArrowColor: function () {
-                if (this.downvoted) return constants.COLOR_DOWNVOTE
+                if (this.voteState == "down") return constants.COLOR_DOWNVOTE
                 else return "black"
             },
             inSub: function () {
@@ -78,6 +84,10 @@
                 else return false
             }
         },
+        mounted () {
+            this.points = this.listing.points
+            this.voteState = this.listing.voteState
+        }
     }
 </script>
 
