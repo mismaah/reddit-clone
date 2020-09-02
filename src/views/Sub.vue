@@ -26,7 +26,7 @@
         }),
         methods: {
             getSubData () {
-                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/sub/${this.subName}`, {
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/sub/${this.subName}/${this.$store.getters.getCurrentUser}`, {
                     method: 'get',
                     headers: {
                         'Accept': 'application/json',

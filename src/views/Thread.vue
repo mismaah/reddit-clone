@@ -85,7 +85,7 @@
                 this.$router.push(`/r/${this.subName}`)
             },
             getListingData () {
-                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/thread/${this.threadID}`, {
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/thread/${this.threadID}/${this.$store.getters.getCurrentUser}`, {
                     method: 'get',
                     headers: {
                         'Accept': 'application/json',

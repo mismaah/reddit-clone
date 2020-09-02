@@ -54,7 +54,7 @@
                     })
             },
             getAllThreads () {
-                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/home/na`, {
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/home/na/${this.$store.getters.getCurrentUser}`, {
                     method: 'get',
                     headers: {
                         'Accept': 'application/json',
