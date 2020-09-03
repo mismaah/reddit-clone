@@ -54,12 +54,18 @@
                     })
             },
             getAllThreads () {
-                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/home/na/${this.$store.getters.getCurrentUser}`, {
-                    method: 'get',
+                let data = {
+                    kind: "home",
+                    id: "",
+                    currentUser: this.$store.getters.getCurrentUser
+                }
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata`, {
+                    method: 'post',
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'plain/text',
+                    },
+                    body: JSON.stringify(data)
                 })
                     .then(resp => {
                         if (!resp.ok) {

@@ -5,7 +5,7 @@
             <p class="headerBtn" v-if="this.$store.getters.isLoggedIn && !error"><a @click="createThread()">create thread</a></p>
         </span>
         <div class="divider"></div>
-        <p v-if="error">Sub does not exist.</p>
+        <p v-if="error">{{error}}</p>
         <Listing v-for="listing in listings" :listing="listing" :parentSub="subName" :key="listing.title"></Listing>
     </div>
 </template>
@@ -26,12 +26,18 @@
         }),
         methods: {
             getSubData () {
-                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/sub/${this.subName}/${this.$store.getters.getCurrentUser}`, {
-                    method: 'get',
+                let data = {
+                    kind: "sub",
+                    id: this.subName,
+                    currentUser: this.$store.getters.getCurrentUser
+                }
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata`, {
+                    method: 'post',
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
                 })
                     .then(resp => {
                         if (!resp.ok) {

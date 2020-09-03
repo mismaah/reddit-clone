@@ -85,12 +85,18 @@
                 this.$router.push(`/r/${this.subName}`)
             },
             getListingData () {
-                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata/thread/${this.threadID}/${this.$store.getters.getCurrentUser}`, {
-                    method: 'get',
+                let data = {
+                    kind: "thread",
+                    id: this.threadID,
+                    currentUser: this.$store.getters.getCurrentUser
+                }
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata`, {
+                    method: 'post',
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
                 })
                     .then(resp => {
                         if (!resp.ok) {
@@ -107,12 +113,18 @@
                     })
             },
             getCommentData () {
-                fetch(`${process.env.VUE_APP_BASE_URL}/api/getcommentdata/thread/${this.threadID}`, {
-                    method: 'get',
+                let data = {
+                    kind: "thread",
+                    id: this.threadID,
+                    currentUser: this.$store.getters.getCurrentUser
+                }
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getcommentdata`, {
+                    method: 'post',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify(data)
                 })
                     .then(resp => {
                         if (!resp.ok) {

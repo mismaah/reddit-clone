@@ -10,8 +10,8 @@
         <div v-show="!collapsed">
             <div class="contents">
                 <span v-if="this.$store.getters.isLoggedIn" class="voteArea">
-                    <i @click="upvote()" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
-                    <i @click="downvote()" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
+                    <i @click="vote('up')" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
+                    <i @click="vote('down')" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
                 </span>
                 <span class="textArea">
                     <span class="body">{{comment.body}}</span>
@@ -50,10 +50,40 @@
             errorReply: null,
             collapsed: false,
             totalChildCount: 0,
-            upvoted: false,
-            downvoted: false,
+            voteState: null,
+            points: null
         }),
         methods: {
+            vote (type) {
+                let vote = {
+                    voteType: type,
+                    kind: "comment",
+                    kindID: this.comment.ID,
+                    username: this.$store.getters.getCurrentUser,
+                }
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/createvote`, {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(vote)
+                })
+                    .then(resp => {
+                        if (resp.ok) {
+                            return resp.json()
+                                .then(resp => {
+                                    this.voteState = resp.voteState
+                                    this.points = resp.points
+                                })
+                        } else {
+                            return resp.text()
+                                .then(resp => {
+                                    alert(resp)
+                                })
+                        }
+                    })
+            },
             permalink () {
                 this.$router.push(`/permalink/${this.comment.ID}`)
             },
@@ -107,45 +137,22 @@
                 }
                 return total
             },
-            upvote () {
-                if (this.upvoted) this.upvoted = false
-                else {
-                    this.upvoted = true
-                    this.downvoted = false
-                }
-            },
-            downvote () {
-                if (this.downvoted) this.downvoted = false
-                else {
-                    this.downvoted = true
-                    this.upvoted = false
-                }
-            },
             collapse () {
                 this.collapsed = !this.collapsed
             }
         },
         mounted () {
             if (this.comment.children) this.children = this.comment.children
+            this.points = this.comment.points
+            this.voteState = this.comment.voteState
         },
         computed: {
-            voteState: function () {
-                if (this.downvoted && !this.upvoted) return 1
-                if (this.upvoted && !this.downvoted) return 2
-                else return 0
-            },
-            points: function () {
-                var point = this.$props.comment.points
-                if (this.voteState == 1) return point - 1
-                if (this.voteState == 2) return point + 1
-                else return point
-            },
             upArrowColor: function () {
-                if (this.upvoted) return constants.COLOR_UPVOTE
+                if (this.voteState == "up") return constants.COLOR_UPVOTE
                 else return "black"
             },
             downArrowColor: function () {
-                if (this.downvoted) return constants.COLOR_DOWNVOTE
+                if (this.voteState == "down") return constants.COLOR_DOWNVOTE
                 else return "black"
             }
         },

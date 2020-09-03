@@ -36,13 +36,19 @@
             goToSub () {
                 this.$router.push(`/r/${this.subName}`)
             },
-            getCommentData () {
-                fetch(`${process.env.VUE_APP_BASE_URL}/api/getcommentdata/comment/${this.commentID}`, {
-                    method: 'get',
+            getListingData () {
+                let data = {
+                    kind: "thread",
+                    id: this.comment.threadID,
+                    currentUser: this.$store.getters.getCurrentUser
+                }
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata`, {
+                    method: 'post',
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
                 })
                     .then(resp => {
                         if (!resp.ok) {
@@ -53,9 +59,37 @@
                         } else {
                             return resp.json()
                                 .then(resp => {
-                                    this.comment = resp.comment
-                                    this.listing = resp.listing
-                                    this.subName = resp.listing.subName
+                                    this.listing = resp
+                                    this.subName = resp.subName
+                                })
+                        }
+                    })
+            },
+            getCommentData () {
+                let data = {
+                    kind: "comment",
+                    id: this.commentID,
+                    currentUser: this.$store.getters.getCurrentUser
+                }
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/getcommentdata`, {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(resp => {
+                        if (!resp.ok) {
+                            return resp.text()
+                                .then(error => {
+                                    this.error = error
+                                })
+                        } else {
+                            return resp.json()
+                                .then(resp => {
+                                    this.comment = resp
+                                    this.getListingData()
                                 })
                         }
                     })
