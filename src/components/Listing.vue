@@ -10,7 +10,8 @@
             <span class="subtitle">
                 <span class="user" @click="goToUser(listing)">{{listing.createdBy}} </span>
                 <span v-if="!inSub">to </span>
-                <span v-if="!inSub" class="subName" @click="goToSub(listing)">r/{{listing.subName}}</span>
+                <span v-if="!inSub" class="subName" @click="goToSub(listing)">r/{{listing.subName}} </span>
+                <span :title="dateFromUnixTime(listing.createdOn)">{{timeAgo(listing.createdOn)}}</span>
             </span>
             <span class="commentCount" v-if="listing.commentCount">
                 {{listing.commentCount}} <span v-if="listing.commentCount==1">comment</span> <span v-else>comments</span>
@@ -71,6 +72,39 @@
             },
             goToUser(listing){
                 this.$router.push(`/u/${listing.createdBy}`)
+            },
+            dateFromUnixTime(unixTime) {
+                let datetime = new Date(unixTime * 1000).toISOString()
+                return `${datetime.substring(0, 10)} ${datetime.substring(11, 19)}`
+            },
+            timeAgo(unixTime) {
+                let now = (Date.now() / 1000).toFixed(0)
+                let diff = (now - unixTime)
+                let unit
+                let plural = "s"
+                if (diff < 60) unit = 'second'
+                else if (diff < 60*60) {
+                    unit = 'minute'
+                    diff = diff / 60
+                }
+                else if (diff < 60*60*24) {
+                    unit = 'hour'
+                    diff = diff / 60 / 60
+                }
+                else if (diff < 60*60*24*30) {
+                    unit = 'day'
+                    diff = diff / 60 / 60 / 24
+                }
+                else if (diff < 60*60*24*30*12) {
+                    unit = 'month'
+                    diff = diff / 60 / 60 / 24 / 30
+                }
+                else{
+                    unit = 'year'
+                    diff = diff / 60 / 60 / 24 / 30 / 12
+                }
+                if (diff.toFixed(0) == 1) plural = ""
+                return `${diff.toFixed(0)} ${unit}${plural} ago`
             }
         },
         computed: {
