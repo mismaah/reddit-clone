@@ -166,7 +166,7 @@
                     unit = 'day'
                     diff = diff / 60 / 60 / 24
                 }
-                else if (diff < 60*60*24*30*12) {
+                else if (diff < 60*60*24*365) {
                     unit = 'month'
                     diff = diff / 60 / 60 / 24 / 30
                 }
