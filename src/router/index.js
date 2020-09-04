@@ -9,6 +9,7 @@ import CreateThread from '../views/CreateThread.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Permalink from '../views/Permalink.vue'
+import User from '../views/User.vue'
 
 Vue.use(VueRouter)
 
@@ -62,6 +63,12 @@ const routes = [
         component: Permalink,
         props: true,
     },
+    {
+        path: '/u/:username',
+        name: 'User',
+        component: User,
+        props: true
+    }
 ]
 
 const router = new VueRouter({
