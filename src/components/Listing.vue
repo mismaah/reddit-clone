@@ -99,9 +99,9 @@
                     unit = 'month'
                     diff = diff / 60 / 60 / 24 / 30
                 }
-                else{
+                else {
                     unit = 'year'
-                    diff = diff / 60 / 60 / 24 / 30 / 12
+                    diff = diff / 60 / 60 / 24 / 365
                 }
                 if (diff.toFixed(0) == 1) plural = ""
                 return `${diff.toFixed(0)} ${unit}${plural} ago`
