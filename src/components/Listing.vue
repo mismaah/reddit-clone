@@ -80,6 +80,7 @@
             timeAgo(unixTime) {
                 let now = (Date.now() / 1000).toFixed(0)
                 let diff = (now - unixTime)
+                if (unixTime == 0) diff = 0
                 let unit
                 let plural = "s"
                 if (diff < 60) unit = 'second'
