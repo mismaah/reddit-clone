@@ -3,7 +3,7 @@
         <div class="top">
             <i v-if="!collapsed" @click="collapse()" title="Hide child comments" class="material-icons collapseBtn">remove</i>
             <i v-else @click="collapse()" title="Show child comments" class="material-icons collapseBtn">add</i>
-            <span class="user">{{comment.username}} </span>
+            <span class="user" @click="goToUser()">{{comment.username}} </span>
             <span class="points"> {{points}} <span v-if="points == 1">point</span><span v-else>points</span></span>
             <p class="utilBtn" @click="permalink()">permalink</p>
         </div>
@@ -139,6 +139,9 @@
             },
             collapse () {
                 this.collapsed = !this.collapsed
+            },
+            goToUser(){
+                this.$router.push(`/u/${this.comment.username}`)
             }
         },
         mounted () {

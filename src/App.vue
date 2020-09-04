@@ -5,7 +5,7 @@
                 <router-link to="/">HOME</router-link>
             </span>
             <span v-if="isLoggedIn" class="navright">
-                <a class="user">{{username}}</a> - 
+                <a class="user" @click="goToUser()">{{username}}</a> - 
                 <a class="logoutBtn" @click="logout()">LOGOUT</a>
             </span>
             <span v-else class="navright plain">
@@ -23,6 +23,9 @@
             logout: function () {
                 this.$store.dispatch('logout')
             },
+            goToUser(){
+                this.$router.push(`/u/${this.username}`)
+            }
         },
         computed : {
             isLoggedIn : function(){return this.$store.getters.isLoggedIn},

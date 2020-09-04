@@ -8,7 +8,7 @@
         <span class="textArea">
             <span @click="goToThread(listing)" class="listingTitle">{{listing.threadTitle}}</span>
             <span class="subtitle">
-                <span class="user">{{listing.createdBy}} </span>
+                <span class="user" @click="goToUser(listing)">{{listing.createdBy}} </span>
                 <span v-if="!inSub">to </span>
                 <span v-if="!inSub" class="subName" @click="goToSub(listing)">r/{{listing.subName}}</span>
             </span>
@@ -68,6 +68,9 @@
             },
             goToSub(listing){
                 this.$router.push(`/r/${listing.subName}`)
+            },
+            goToUser(listing){
+                this.$router.push(`/u/${listing.createdBy}`)
             }
         },
         computed: {
