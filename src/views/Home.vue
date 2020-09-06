@@ -72,7 +72,6 @@
                     currentUser: this.$store.getters.getCurrentUser,
                     sortBy: this.sortBy,
                 }
-                console.log(this.sortBy)
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata`, {
                     method: 'post',
                     headers: {
