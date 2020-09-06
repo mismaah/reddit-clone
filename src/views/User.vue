@@ -8,13 +8,35 @@
             <p class="tab"><a @click="tab='posts'" :style="{'text-decoration': isOn('posts')}">posts</a></p>
             <p class="tab"><a @click="tab='comments'" :style="{'text-decoration': isOn('comments')}">comments</a></p>
         </span>
-        <div v-if="tab=='posts'">
-            <p v-if="postsError">{{postsError}}</p>
-            <Listing v-for="listing in listings" :listing="listing" :key="listing.ID"></Listing>
+        <div v-if="tab=='posts'" class="listings">
+            <div class="sortBy">
+                sort by
+                <select v-model="sortPostsBy">
+                    <option>top</option>
+                    <option>bottom</option>
+                    <option>new</option>
+                    <option>old</option>
+                </select>
+            </div>
+            <div>
+                <p v-if="postsError">{{postsError}}</p>
+                <Listing v-for="listing in listings" :listing="listing" :key="listing.ID"></Listing>
+            </div>
         </div>
-        <div v-if="tab=='comments'">
-            <p v-if="commentsError">{{commentsError}}</p>
-            <Comment v-for="comment in comments" :comment="comment" :key="comment.ID"></Comment>
+        <div v-if="tab=='comments'" class="comments">
+            <div class="sortBy">
+                sort by
+                <select v-model="sortCommentsBy">
+                    <option>top</option>
+                    <option>bottom</option>
+                    <option>new</option>
+                    <option>old</option>
+                </select>
+            </div>
+            <div>
+                <p v-if="commentsError">{{commentsError}}</p>
+                <Comment v-for="comment in comments" :comment="comment" :key="comment.ID"></Comment>
+            </div>
         </div>
     </div>
 </template>
@@ -37,13 +59,16 @@
             tab: "posts",
             listings: [],
             comments: [],
+            sortPostsBy: "top",
+            sortCommentsBy: "top",
         }),
         methods: {
             getPosts () {
                 let data = {
                     kind: "user",
                     id: this.username,
-                    currentUser: this.$store.getters.getCurrentUser
+                    currentUser: this.$store.getters.getCurrentUser,
+                    sortBy: this.sortPostsBy
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata`, {
                     method: 'post',
@@ -71,7 +96,8 @@
                 let data = {
                     kind: "user",
                     id: this.username,
-                    currentUser: this.$store.getters.getCurrentUser
+                    currentUser: this.$store.getters.getCurrentUser,
+                    sortBy: this.sortCommentsBy
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/getcommentdata`, {
                     method: 'post',
@@ -105,6 +131,15 @@
         mounted () {
             this.getPosts()
             this.getComments()
+        },
+        watch: {
+            sortPostsBy: function(){
+                this.getPosts()
+            },
+            sortCommentsBy: function(){
+                this.comments = []
+                this.getComments()
+            }
         }
     }
 </script>
@@ -143,5 +178,20 @@
 a, a:hover, a:focus, a:active {
     text-decoration: none;
     color: inherit;
+}
+.listings {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.comments {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.sortBy {
+    margin-left: 50px;
+    margin-bottom: 20px;
+    font-size: 14px;
 }
 </style>

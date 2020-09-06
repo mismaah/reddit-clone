@@ -17,8 +17,19 @@
             <button @click="reply">Submit</button>
             <p class="error" v-if="errorReply">{{errorReply}}</p>
         </div>
-        <p v-if="errorComments">{{errorComments}}</p>
-        <Comment v-for="comment in comments" :comment="comment" :collapseAll="collapseAll" :key="comment.ID"></Comment>
+        <div class="comments">
+            <div class="sortBy">
+                sort by
+                <select v-model="sortBy">
+                    <option>top</option>
+                    <option>bottom</option>
+                    <option>new</option>
+                    <option>old</option>
+                </select>
+            </div>
+            <p v-if="errorComments">{{errorComments}}</p>
+            <Comment v-for="comment in comments" :comment="comment" :collapseAll="collapseAll" :key="comment.ID"></Comment>
+        </div>
     </div>
 </template>
 
@@ -43,7 +54,8 @@
             errorReply: null,
             errorComments: null,
             collapseAll: false,
-            comments: []
+            comments: [],
+            sortBy: "top"
         }),
         methods: {
             reply () {
@@ -116,7 +128,8 @@
                 let data = {
                     kind: "thread",
                     id: this.threadID,
-                    currentUser: this.$store.getters.getCurrentUser
+                    currentUser: this.$store.getters.getCurrentUser,
+                    sortBy: this.sortBy
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/getcommentdata`, {
                     method: 'post',
@@ -144,6 +157,12 @@
         mounted () {
             this.getListingData()
             this.getCommentData()
+        },
+        watch: {
+            sortBy: function(){
+                this.comments = []
+                this.getCommentData()
+            }
         }
     }
 </script>
@@ -194,6 +213,16 @@
     margin: 0px;
     font-size: 12px;
     color: red;
+}
+.comments {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.sortBy {
+    margin-left: 50px;
+    margin-bottom: 10px;
+    font-size: 14px;
 }
 textarea {
   font-family: inherit;

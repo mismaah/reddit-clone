@@ -7,8 +7,19 @@
         <div class="divider"></div>
         <p v-if="error">{{error}}</p>
         <div v-else class="homeDiv">
-            <div>
-                <Listing v-for="listing in listings" :listing="listing" parentSub="home" :key="listing.title"></Listing>
+            <div class="listings">
+                <div class="sortBy">
+                    sort by
+                    <select v-model="sortBy">
+                        <option>top</option>
+                        <option>bottom</option>
+                        <option>new</option>
+                        <option>old</option>
+                    </select>
+                </div>
+                <div>
+                    <Listing v-for="listing in listings" :listing="listing" parentSub="home" :key="listing.ID"></Listing>
+                </div>
             </div>
             <div class="subList">
                 <p class="subListHeader">All subs</p>
@@ -29,6 +40,7 @@
             listings: [],
             subs: [],
             error: null,
+            sortBy: "top"
         }),
         methods: {
             getAllSubs () {
@@ -57,8 +69,10 @@
                 let data = {
                     kind: "home",
                     id: "",
-                    currentUser: this.$store.getters.getCurrentUser
+                    currentUser: this.$store.getters.getCurrentUser,
+                    sortBy: this.sortBy,
                 }
+                console.log(this.sortBy)
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata`, {
                     method: 'post',
                     headers: {
@@ -88,6 +102,11 @@
         mounted () {
             this.getAllSubs()
             this.getAllThreads()
+        },
+        watch: {
+            sortBy: function(){
+                this.getAllThreads()
+            }
         }
     }
 </script>
@@ -136,5 +155,15 @@ a, a:hover, a:focus, a:active {
 .subListHeader {
     margin-top: 0px;
     margin-bottom: 5px;
+}
+.listings {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.sortBy {
+    margin-left: 50px;
+    margin-bottom: 20px;
+    font-size: 14px;
 }
 </style>

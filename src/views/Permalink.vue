@@ -7,7 +7,18 @@
         <div class="threadUtil">
             <p class="utilBtn" @click="goToThread()">view full context</p>
         </div>
-        <Comment v-if="comment" :comment="comment"></Comment>
+        <div class="comments">
+            <div class="sortBy">
+                sort by
+                <select v-model="sortBy">
+                    <option>top</option>
+                    <option>bottom</option>
+                    <option>new</option>
+                    <option>old</option>
+                </select>
+            </div>
+            <Comment v-if="comment" :comment="comment" :key="sortBy"></Comment>
+        </div>
     </div>
 </template>
 
@@ -28,6 +39,7 @@
             subName: null,
             listing: null,
             comment: null,
+            sortBy: "top",
         }),
         methods: {
             goToThread(){
@@ -69,7 +81,8 @@
                 let data = {
                     kind: "comment",
                     id: this.commentID,
-                    currentUser: this.$store.getters.getCurrentUser
+                    currentUser: this.$store.getters.getCurrentUser,
+                    sortBy: this.sortBy
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/getcommentdata`, {
                     method: 'post',
@@ -97,6 +110,12 @@
         },
         mounted () {
             this.getCommentData()
+        },
+        watch: {
+            sortBy: function(){
+                this.comment = null
+                this.getCommentData()
+            }
         }
     }
 </script>
@@ -137,6 +156,16 @@
 }
 .utilBtn:hover {
     text-decoration: underline;
+}
+.comments {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.sortBy {
+    margin-left: 50px;
+    margin-bottom: 10px;
+    font-size: 14px;
 }
 textarea {
   font-family: inherit;

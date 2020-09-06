@@ -6,7 +6,20 @@
         </span>
         <div class="divider"></div>
         <p v-if="error">{{error}}</p>
-        <Listing v-for="listing in listings" :listing="listing" :parentSub="subName" :key="listing.title"></Listing>
+        <div class="listings">
+            <div class="sortBy">
+                sort by
+                <select v-model="sortBy">
+                    <option>top</option>
+                    <option>bottom</option>
+                    <option>new</option>
+                    <option>old</option>
+                </select>
+            </div>
+            <div>
+                <Listing v-for="listing in listings" :listing="listing" :parentSub="subName" :key="listing.ID"></Listing>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -22,14 +35,16 @@
         },
         data: () => ({
             error: null,
-            listings: []
+            listings: [],
+            sortBy: "top"
         }),
         methods: {
             getSubData () {
                 let data = {
                     kind: "sub",
                     id: this.subName,
-                    currentUser: this.$store.getters.getCurrentUser
+                    currentUser: this.$store.getters.getCurrentUser,
+                    sortBy: this.sortBy,
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata`, {
                     method: 'post',
@@ -59,6 +74,11 @@
         },
         mounted () {
             this.getSubData()
+        },
+        watch: {
+            sortBy: function(){
+                this.getSubData()
+            }
         }
     }
 </script>
@@ -89,5 +109,15 @@
 a, a:hover, a:focus, a:active {
       text-decoration: none;
       color: inherit;
+}
+.listings {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.sortBy {
+    margin-left: 50px;
+    margin-bottom: 20px;
+    font-size: 14px;
 }
 </style>
