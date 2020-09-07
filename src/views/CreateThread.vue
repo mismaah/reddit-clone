@@ -47,12 +47,38 @@
                         if (resp.ok) {
                             return resp.json()
                                 .then(resp => {
-                                    this.$router.push({name: 'Thread', params: {subName: this.subName, threadID: resp.threadID, url: resp.url}})
+                                    this.vote("up", resp)
                                 })
                         } else {
                             return resp.text()
                                 .then(result => {
                                     this.error = result
+                                })
+                        }
+                    })
+            },
+            vote (type, listing) {
+                let vote = {
+                    voteType: type,
+                    kind: "thread",
+                    kindID: listing.threadID,
+                    username: this.$store.getters.getCurrentUser,
+                }
+                fetch(`${process.env.VUE_APP_BASE_URL}/api/createvote`, {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(vote)
+                })
+                    .then(resp => {
+                        if (resp.ok) {
+                            this.$router.push({name: 'Thread', params: {subName: this.subName, threadID: listing.threadID, url: listing.url}})
+                        } else {
+                            return resp.text()
+                                .then(resp => {
+                                    alert(resp)
                                 })
                         }
                     })
