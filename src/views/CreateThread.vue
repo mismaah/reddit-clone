@@ -30,8 +30,8 @@
                 // if (this.threadTitle == "") return
                 this.error = null
                 let createThread = {
-                    subname: this.subName,
-                    createdBy: this.$store.getters.getCurrentUser,
+                    subName: this.subName,
+                    token: this.$store.getters.getToken,
                     threadTitle: this.threadTitle,
                     threadBody: this.threadBody
                 }
@@ -50,6 +50,12 @@
                                     this.vote("up", resp)
                                 })
                         } else {
+                            if (resp.status == 401){
+                                setTimeout(function() {
+                                    this.$store.dispatch('logout', resp)
+                                    this.$router.push("/login")
+                                }.bind(this), 2000)
+                            }
                             return resp.text()
                                 .then(result => {
                                     this.error = result
@@ -62,7 +68,7 @@
                     voteType: type,
                     kind: "thread",
                     kindID: listing.threadID,
-                    username: this.$store.getters.getCurrentUser,
+                    token: this.$store.getters.getToken,
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/createvote`, {
                     method: 'post',
@@ -76,6 +82,12 @@
                         if (resp.ok) {
                             this.$router.push({name: 'Thread', params: {subName: this.subName, threadID: listing.threadID, url: listing.url}})
                         } else {
+                            if (resp.status == 401){
+                                setTimeout(function() {
+                                    this.$store.dispatch('logout', resp)
+                                    this.$router.push("/login")
+                                }.bind(this), 2000)
+                            }
                             return resp.text()
                                 .then(resp => {
                                     alert(resp)

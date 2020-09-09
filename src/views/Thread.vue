@@ -63,7 +63,7 @@
                 if (!this.body || this.body.trim() == "") return
                 let comment = {
                     body: this.body,
-                    username: this.$store.getters.getCurrentUser,
+                    token: this.$store.getters.getToken,
                     threadID: this.threadID,
                     subName: this.subName,
                 }
@@ -78,11 +78,17 @@
                     .then(resp => {
                         if (resp.ok) {
                             return resp.json()
-                                .then(comment => {
-                                    this.comments.unshift(comment)
+                                .then(resp => {
+                                    this.comments.unshift(resp.comment)
                                     this.body = ""
                                 })
                         } else {
+                            if (resp.status == 401){
+                                setTimeout(function() {
+                                    this.$store.dispatch('logout', resp)
+                                    this.$router.push("/login")
+                                }.bind(this), 2000)
+                            }
                             return resp.text()
                                 .then(result => {
                                     this.errorReply = result

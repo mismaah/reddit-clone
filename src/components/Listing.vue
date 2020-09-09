@@ -38,7 +38,7 @@
                     voteType: type,
                     kind: "thread",
                     kindID: this.listing.ID,
-                    username: this.$store.getters.getCurrentUser,
+                    token: this.$store.getters.getToken,
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/createvote`, {
                     method: 'post',
@@ -54,9 +54,14 @@
                                 .then(resp => {
                                     this.voteState = resp.voteState
                                     this.points = resp.points
-
                                 })
                         } else {
+                            if (resp.status == 401){
+                                setTimeout(function() {
+                                    this.$store.dispatch('logout', resp)
+                                    this.$router.push("/login")
+                                }.bind(this), 2000)
+                            }
                             return resp.text()
                                 .then(resp => {
                                     alert(resp)

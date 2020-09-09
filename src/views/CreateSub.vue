@@ -19,28 +19,35 @@
             createSub() {
                 this.error = null
                 if (this.subname == "") return
-                let createSub = {
+                let payload = {
                     subName: this.subname,
-                    createdBy: this.$store.getters.getCurrentUser
+                    token: this.$store.getters.getToken
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/createsub`, {
                     method: 'post',
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(createSub)
+                    body: JSON.stringify(payload)
                 })
                     .then(resp => {
                         if (resp.ok) {
                             this.$router.push(`/r/${this.subname}`)
                         } else {
+                            if (resp.status == 401){
+                                setTimeout(function() {
+                                    this.$store.dispatch('logout', resp)
+                                    this.$router.push("/login")
+                                }.bind(this), 2000)
+                            }
                             return resp.text()
+                                .then(result => {
+                                    this.error = result
+                                })
                         }
                     })
-                    .then(result => {
-                        this.error = result
-                    })
+                    
             }
         }
     }

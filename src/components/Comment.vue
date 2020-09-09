@@ -60,7 +60,7 @@
                     voteType: type,
                     kind: "comment",
                     kindID: this.comment.ID,
-                    username: this.$store.getters.getCurrentUser,
+                    token: this.$store.getters.getToken,
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/createvote`, {
                     method: 'post',
@@ -78,6 +78,12 @@
                                     this.points = resp.points
                                 })
                         } else {
+                            if (resp.status == 401){
+                                setTimeout(function() {
+                                    this.$store.dispatch('logout', resp)
+                                    this.$router.push("/login")
+                                }.bind(this), 2000)
+                            }
                             return resp.text()
                                 .then(resp => {
                                     alert(resp)
@@ -99,7 +105,7 @@
                 if (!this.body || this.body.trim() == "") return
                 let comment = {
                     body: this.body,
-                    username: this.$store.getters.getCurrentUser,
+                    token: this.$store.getters.getToken,
                     threadID: this.comment.threadID,
                     subName: this.comment.subName,
                     parent: this.comment.ID
@@ -115,12 +121,18 @@
                     .then(resp => {
                         if (resp.ok) {
                             return resp.json()
-                                .then(comment => {
-                                    this.children.unshift(comment)
+                                .then(resp => {
+                                    this.children.unshift(resp.comment)
                                     this.body = ""
                                     this.replyTextBox = null
                                 })
                         } else {
+                            if (resp.status == 401){
+                                setTimeout(function() {
+                                    this.$store.dispatch('logout', resp)
+                                    this.$router.push("/login")
+                                }.bind(this), 2000)
+                            }
                             return resp.text()
                                 .then(result => {
                                     this.errorReply = result
@@ -225,6 +237,7 @@
     margin-bottom: 1px;
     margin-left: 20px;
     text-align: left;
+    min-width: 95%;
 }
 .points {
     font-size: 11px;
