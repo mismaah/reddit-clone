@@ -7,7 +7,8 @@ const state = {
 const getters = {
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
-    getCurrentUser: state => state.username
+    getCurrentUser: state => state.username,
+    getToken: state => state.token,
 }
 const actions = {
     login: ({commit}, payload) => {
@@ -32,11 +33,20 @@ const actions = {
     },
     logout({commit}){
         return new Promise((resolve) => {
-          commit('logout')
-          localStorage.removeItem('username')
-          localStorage.removeItem('token')
-          delete axios.defaults.headers.common['Authorization']
-          resolve()
+            commit('logout')
+            localStorage.removeItem('username')
+            localStorage.removeItem('token')
+            delete axios.defaults.headers.common['Authorization']
+            resolve()
+        })
+    },
+    renewToken({commit}, data){
+        return new Promise((resolve) => {
+            commit('auth_request')
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('username', data.username)
+            commit('auth_success', data)
+            resolve()
         })
     }
 }
