@@ -11,6 +11,7 @@
                 <div class="sortBy">
                     sort by
                     <select v-model="sortBy">
+                        <option>hot</option>
                         <option>top</option>
                         <option>bottom</option>
                         <option>new</option>
@@ -40,7 +41,7 @@
             listings: [],
             subs: [],
             error: null,
-            sortBy: "top"
+            sortBy: "hot"
         }),
         methods: {
             getAllSubs () {
