@@ -14,7 +14,6 @@
 </template>
 
 <script>
-    import {constants} from '@/constants.js'
     export default {
         name: "Register",
         data: () => ({
@@ -57,25 +56,9 @@
             },
             validate () {
                 var valid = true
-                if (this.username.length <= constants.VALIDATIONS.USERNAME_MIN) {
-                    valid = false
-                    this.errors.push(`Username should be more than ${constants.VALIDATIONS.USERNAME_MIN} characters.`)
-                }
-                if (this.username.length >= constants.VALIDATIONS.USERNAME_MAX) {
-                    valid = false
-                    this.errors.push(`Username should be less than ${constants.VALIDATIONS.USERNAME_MIN} characters.`)
-                }
-                if (this.password.length <= constants.VALIDATIONS.PASSWORD_MIN) {
-                    valid = false
-                    this.errors.push(`Password should be more than ${constants.VALIDATIONS.PASSWORD_MIN} characters.`)
-                }
                 if (!(this.password == this.passwordRe)) {
                     valid = false
                     this.errors.push("Passwords do not match.")
-                }
-                if (!constants.VALIDATIONS.EMAIL.test(this.email.toLowerCase())) {
-                    valid = false
-                    this.errors.push("Invalid email.")
                 }
                 return valid
             },
