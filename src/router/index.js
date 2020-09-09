@@ -78,12 +78,34 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     localStorage.setItem('prevRoute', from.name)
+    if (store.getters.isLoggedIn) {
+        fetch(`${process.env.VUE_APP_BASE_URL}/api/validate`, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(store.getters.getToken)
+        })
+            .then(resp => {
+                if (resp.ok) {
+                    return resp.json()
+                        .then(resp => {
+                            store.dispatch('renewToken', {token: resp.token, username: resp.username})
+                        })
+                } else {
+                    if (resp.status == 401){
+                        store.dispatch('logout', resp)
+                    }
+                }
+            })
+    }
     if(to.matched.some(record => record.meta.requiresAuth)) {
       if (store.getters.isLoggedIn) {
         next()
         return
       }
-      next('/') 
+      next('/login') 
     } else {
       next() 
     }
