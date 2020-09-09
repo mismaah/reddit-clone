@@ -22,6 +22,7 @@
         methods: {
             logout: function () {
                 this.$store.dispatch('logout')
+                if (this.$route.meta.requiresAuth) this.$router.push("/login")
             },
             goToUser(){
                 this.$router.push(`/u/${this.username}`)
