@@ -59,8 +59,8 @@
             tab: "posts",
             listings: [],
             comments: [],
-            sortPostsBy: "top",
-            sortCommentsBy: "top",
+            sortPostsBy: "new",
+            sortCommentsBy: "new",
         }),
         methods: {
             getPosts () {

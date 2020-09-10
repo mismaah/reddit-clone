@@ -10,14 +10,14 @@
         <div class="comments">
             <div class="sortBy">
                 sort by
-                <select v-model="sortBy">
+                <select v-model="preferences.commentSorting" @change="getCommentData()">
                     <option>top</option>
                     <option>bottom</option>
                     <option>new</option>
                     <option>old</option>
                 </select>
             </div>
-            <Comment v-if="comment" :comment="comment" :key="sortBy"></Comment>
+            <Comment v-if="comment" :comment="comment" :key="preferences.commentSorting"></Comment>
         </div>
     </div>
 </template>
@@ -39,7 +39,10 @@
             subName: null,
             listing: null,
             comment: null,
-            sortBy: "top",
+            preferences: {
+                postSorting: "hot",
+                commentSorting: "top"
+            }
         }),
         methods: {
             goToThread(){
@@ -78,11 +81,12 @@
                     })
             },
             getCommentData () {
+                this.comment = null
                 let data = {
                     kind: "comment",
                     id: this.commentID,
                     currentUser: this.$store.getters.getCurrentUser,
-                    sortBy: this.sortBy
+                    sortBy: this.preferences.commentSorting
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/getcommentdata`, {
                     method: 'post',
@@ -106,17 +110,16 @@
                                 })
                         }
                     })
+            },
+            getPreferences(){
+                if (localStorage.getItem('preferences') === null) return
+                this.preferences = JSON.parse(localStorage.getItem('preferences'))
             }
         },
         mounted () {
+            this.getPreferences()
             this.getCommentData()
         },
-        watch: {
-            sortBy: function(){
-                this.comment = null
-                this.getCommentData()
-            }
-        }
     }
 </script>
 

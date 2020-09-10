@@ -20,7 +20,7 @@
         <div class="comments">
             <div class="sortBy">
                 sort by
-                <select v-model="sortBy">
+                <select v-model="preferences.commentSorting" @change="getCommentData()">
                     <option>top</option>
                     <option>bottom</option>
                     <option>new</option>
@@ -55,7 +55,10 @@
             errorComments: null,
             collapseAll: false,
             comments: [],
-            sortBy: "top"
+            preferences: {
+                postSorting: "hot",
+                commentSorting: "top"
+            }
         }),
         methods: {
             reply () {
@@ -131,11 +134,12 @@
                     })
             },
             getCommentData () {
+                this.comments = []
                 let data = {
                     kind: "thread",
                     id: this.threadID,
                     currentUser: this.$store.getters.getCurrentUser,
-                    sortBy: this.sortBy
+                    sortBy: this.preferences.commentSorting
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/getcommentdata`, {
                     method: 'post',
@@ -158,18 +162,17 @@
                                 })
                         }
                     })
+            },
+            getPreferences(){
+                if (localStorage.getItem('preferences') === null) return
+                this.preferences = JSON.parse(localStorage.getItem('preferences'))
             }
         },
         mounted () {
+            this.getPreferences()
             this.getListingData()
             this.getCommentData()
         },
-        watch: {
-            sortBy: function(){
-                this.comments = []
-                this.getCommentData()
-            }
-        }
     }
 </script>
 

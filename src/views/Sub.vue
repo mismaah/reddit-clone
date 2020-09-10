@@ -9,7 +9,7 @@
         <div class="listings">
             <div class="sortBy">
                 sort by
-                <select v-model="sortBy">
+                <select v-model="preferences.postSorting" @change="getSubData()">
                     <option>hot</option>
                     <option>top</option>
                     <option>bottom</option>
@@ -37,7 +37,10 @@
         data: () => ({
             error: null,
             listings: [],
-            sortBy: "hot"
+            preferences: {
+                postSorting: "hot",
+                commentSorting: "top"
+            }
         }),
         methods: {
             getSubData () {
@@ -45,7 +48,7 @@
                     kind: "sub",
                     id: this.subName,
                     currentUser: this.$store.getters.getCurrentUser,
-                    sortBy: this.sortBy,
+                    sortBy: this.preferences.postSorting,
                 }
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/getlistingdata`, {
                     method: 'post',
@@ -71,16 +74,16 @@
             },
             createThread () {
                 this.$router.push({name: 'Create Thread', params: {subName: this.subName}})
+            },
+            getPreferences(){
+                if (localStorage.getItem('preferences') === null) return
+                this.preferences = JSON.parse(localStorage.getItem('preferences'))
             }
         },
         mounted () {
+            this.getPreferences()
             this.getSubData()
         },
-        watch: {
-            sortBy: function(){
-                this.getSubData()
-            }
-        }
     }
 </script>
 
