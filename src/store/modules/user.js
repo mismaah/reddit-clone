@@ -16,11 +16,10 @@ const actions = {
             commit('auth_request')
             axios({url: `${process.env.VUE_APP_BASE_URL}/api/login`, data: payload, method: 'POST' })
             .then(resp => {
-                const token = resp.data.token
-                const username = resp.data.username
-                localStorage.setItem('username', username)
-                localStorage.setItem('token', token)
-                axios.defaults.headers.common['Authorization'] = token
+                localStorage.setItem('username', resp.data.username)
+                localStorage.setItem('token', resp.data.token)
+                localStorage.setItem('preferences', resp.data.preferences)
+                axios.defaults.headers.common['Authorization'] = resp.data.token
                 commit('auth_success', resp.data)
                 resolve(resp)
             })
@@ -36,6 +35,7 @@ const actions = {
             commit('logout')
             localStorage.removeItem('username')
             localStorage.removeItem('token')
+            localStorage.removeItem('preferences')
             delete axios.defaults.headers.common['Authorization']
             resolve()
         })
