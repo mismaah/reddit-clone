@@ -6,7 +6,8 @@
             </span>
             <span v-if="isLoggedIn" class="navright">
                 <a class="user" @click="goToUser()">{{username}}</a> - 
-                <a class="logoutBtn" @click="logout()">LOGOUT</a>
+                <a class="navBtn" @click="$router.push('/preferences')">PREFERENCES</a> - 
+                <a class="navBtn" @click="logout()">LOGOUT</a>
             </span>
             <span v-else class="navright plain">
                 <router-link to="/login">LOGIN</router-link> - 
@@ -108,7 +109,7 @@ body {
     color: darkslateblue;
     cursor: pointer;
 }
-.logoutBtn {
+.navBtn {
     cursor: pointer;
 }
 </style>

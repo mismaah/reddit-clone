@@ -10,6 +10,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Permalink from '../views/Permalink.vue'
 import User from '../views/User.vue'
+import Preferences from '../views/Preferences.vue'
 
 Vue.use(VueRouter)
 
@@ -68,6 +69,14 @@ const routes = [
         name: 'User',
         component: User,
         props: true
+    },
+    {
+        path: '/preferences',
+        name: 'Preferences',
+        component: Preferences,
+        meta: { 
+            requiresAuth: true
+        }
     }
 ]
 
