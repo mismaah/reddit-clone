@@ -18,7 +18,7 @@ const actions = {
             .then(resp => {
                 localStorage.setItem('username', resp.data.username)
                 localStorage.setItem('token', resp.data.token)
-                localStorage.setItem('preferences', resp.data.preferences)
+                if (resp.data.preferences != "") localStorage.setItem('preferences', resp.data.preferences)
                 axios.defaults.headers.common['Authorization'] = resp.data.token
                 commit('auth_success', resp.data)
                 resolve(resp)
