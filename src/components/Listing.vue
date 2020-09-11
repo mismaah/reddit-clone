@@ -1,22 +1,33 @@
 <template>
-    <div class="contents">
-        <span class="voteArea">
-            <i v-if="this.$store.getters.isLoggedIn" @click="vote('up')" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
-            <p class="points">{{points}}</p>
-            <i v-if="this.$store.getters.isLoggedIn" @click="vote('down')" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
-        </span>
-        <span class="textArea">
-            <span @click="goToThread(listing)" class="listingTitle">{{listing.threadTitle}}</span>
-            <span class="subtitle">
-                <span class="user" @click="goToUser(listing)">{{listing.createdBy}} </span>
-                <span v-if="!inSub">to </span>
-                <span v-if="!inSub" class="subName" @click="goToSub(listing)">r/{{listing.subName}} </span>
-                <span :title="dateFromUnixTime(listing.createdOn)">{{timeAgo(listing.createdOn)}}</span>
+    <div class="top">
+        <div class="contents">
+            <span class="voteArea">
+                <i v-if="this.$store.getters.isLoggedIn" @click="vote('up')" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
+                <p class="points">{{points}}</p>
+                <i v-if="this.$store.getters.isLoggedIn" @click="vote('down')" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
             </span>
-            <span class="commentCount" v-if="listing.commentCount">
-                {{listing.commentCount}} <span v-if="listing.commentCount==1">comment</span> <span v-else>comments</span>
+            <span class="imageArea" v-if="imageURL" title="click to expand" @click="expandImage = !expandImage">
+                <img class="thumbnail" :src="imageURL">
             </span>
-        </span>
+            <span class="textArea">
+                <span>
+                    <span @click="goToThread(listing)" class="listingTitle">{{listing.threadTitle}}</span>
+                    <a class="threadLink" v-if="listing.threadLink" :href="listing.threadLink">({{shorterLink}})</a>
+                </span>
+                <span class="subtitle">
+                    <span class="user" @click="goToUser(listing)">{{listing.createdBy}} </span>
+                    <span v-if="!inSub">to </span>
+                    <span v-if="!inSub" class="subName" @click="goToSub(listing)">r/{{listing.subName}} </span>
+                    <span :title="dateFromUnixTime(listing.createdOn)">{{timeAgo(listing.createdOn)}}</span>
+                </span>
+                <span class="commentCount" v-if="listing.commentCount">
+                    {{listing.commentCount}} <span v-if="listing.commentCount==1">comment</span> <span v-else>comments</span>
+                </span>
+            </span>
+        </div>
+        <div class="bigImageContainer" v-if="expandImage">
+            <img class="bigImage" :src="imageURL">
+        </div>
     </div>
 </template>
 
@@ -30,7 +41,10 @@
         },
         data: () => ({
             voteState: null,
-            points: null
+            points: null,
+            imageURL: null,
+            threadLink: null,
+            expandImage: false
         }),
         methods: {
             vote (type) {
@@ -70,7 +84,7 @@
                     })
             },
             goToThread(listing){
-                this.$router.push({name: 'Thread', params: {subName: listing.subName, threadID: listing.ID, url: listing.url}})
+                this.$router.push({name: 'Thread', params: {subName: listing.subName, threadID: listing.ID, url: listing.threadURL}})
             },
             goToSub(listing){
                 this.$router.push(`/r/${listing.subName}`)
@@ -125,16 +139,26 @@
             inSub: function () {
                 if (this.parentSub == this.listing.subName) return true
                 else return false
+            },
+            shorterLink: function () {
+                if (this.listing.threadLink.length > 30) return this.listing.threadLink.substring(0, 27)+"..."
+                return this.listing.threadLink
             }
         },
         mounted () {
             this.points = this.listing.points
             this.voteState = this.listing.voteState
+            if (this.listing.imageURL) this.imageURL = process.env.VUE_APP_BASE_URL + this.listing.imageURL
         }
     }
 </script>
 
 <style scoped>
+.top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 .points {
     font-size: 15px;
     vertical-align: middle;
@@ -150,11 +174,30 @@
     margin-bottom: 15px;
 }
 .voteArea {
-    margin-right: 10px;
     min-width: 50px;
 }
 .voteArrow {
     margin: -5px;
+}
+.imageArea {
+    width: 80px;
+    max-height: 80px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.thumbnail {
+    width: 100%;
+    height: auto;
+}
+.bigImageContainer {
+    max-width: 90%;
+    max-height: 400px;
+    margin-left: 50px;
+}
+.bigImage {
+    max-width: 100%;
+    height: auto;
+    max-height: 400px;
 }
 .textArea {
     text-align: left;
@@ -172,5 +215,9 @@
 .commentCount {
     font-size: 10px;
     font-weight: 500;
+}
+.threadLink {
+    font-size: 12px;
+    margin-left: 5px;
 }
 </style>
