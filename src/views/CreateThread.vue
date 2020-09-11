@@ -5,7 +5,19 @@
         </span>
         <div class="divider"></div>
         <div class="centered">
+            <div class="radioBtns">
+                <input type="radio" id="text" value="text" v-model="threadType">
+                <label for="text">text</label>
+                <input type="radio" id="link" value="link" v-model="threadType">
+                <label for="link">link</label>
+                <input type="radio" id="image" value="image" v-model="threadType">
+                <label for="image">image</label>
+            </div>
             <input placeholder="Enter thread title" v-model="threadTitle" type="text">
+            <form enctype="multipart/form-data">
+                <input v-if="threadType=='image'" accept="image/*" type="file" id="image-select" @change="fileHandler">
+            </form>
+            <input v-if="threadType=='link'" placeholder="Enter url" v-model="threadLink" type="text">
             <textarea v-model="threadBody" rows="3" placeholder="Enter thread body"></textarea>
         </div>
         <button @click="createThread()">Create thread</button>
@@ -23,25 +35,26 @@
         data: () => ({
             threadTitle: "",
             threadBody: "",
-            error: null
+            threadType: "text",
+            threadLink: "",
+            error: null,
+            file: null
         }),
         methods: {
             createThread () {
-                // if (this.threadTitle == "") return
                 this.error = null
-                let createThread = {
-                    subName: this.subName,
-                    token: this.$store.getters.getToken,
-                    threadTitle: this.threadTitle,
-                    threadBody: this.threadBody
-                }
+                let formData = new FormData()
+                formData.append("subName", this.subName)
+                formData.append("token", this.$store.getters.getToken)
+                formData.append("threadTitle", this.threadTitle)
+                formData.append("threadBody", this.threadBody)
+                formData.append("threadType", this.threadType)
+                if (this.threadType == "link") formData.append("threadLink", this.threadLink)
+                if (this.threadType == "image") formData.append("file", this.file)
+                console.log(formData)
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/createthread`, {
                     method: 'post',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(createThread)
+                    body: formData
                 })
                     .then(resp => {
                         if (resp.ok) {
@@ -80,7 +93,7 @@
                 })
                     .then(resp => {
                         if (resp.ok) {
-                            this.$router.push({name: 'Thread', params: {subName: this.subName, threadID: listing.threadID, url: listing.url}})
+                            this.$router.push({name: 'Thread', params: {subName: this.subName, threadID: listing.threadID, url: listing.threadURL}})
                         } else {
                             if (resp.status == 401){
                                 setTimeout(function() {
@@ -98,7 +111,11 @@
             goToSub () {
                 this.$router.push(`/r/${this.subName}`)
             },
-        }
+            fileHandler(e) {
+                let file = e.target.files[0]
+                this.file = file
+            }
+        },
     }
 </script>
 
@@ -124,6 +141,10 @@
     margin: 0px;
     font-size: 12px;
     color: red;
+}
+.radioBtns {
+    display: flex;
+    align-items:baseline;
 }
 textarea, input {
   font-family: inherit;
