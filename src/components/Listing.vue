@@ -12,7 +12,7 @@
             <span class="textArea">
                 <span>
                     <span @click="goToThread(listing)" class="listingTitle">{{listing.threadTitle}}</span>
-                    <a class="threadLink" v-if="listing.threadLink" :href="listing.threadLink">({{shorterLink}})</a>
+                    <a class="threadLink" v-if="listing.threadLink" :href="listing.threadLink" target="_blank">({{shorterLink}})<i class="material-icons launch">launch</i></a>
                 </span>
                 <span class="subtitle">
                     <span class="user" @click="goToUser(listing)">{{listing.createdBy}} </span>
@@ -219,5 +219,8 @@
 .threadLink {
     font-size: 12px;
     margin-left: 5px;
+}
+.launch {
+    font-size: 10px;
 }
 </style>
