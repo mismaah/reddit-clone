@@ -46,7 +46,7 @@
         }),
         methods: {
             goToThread(){
-                this.$router.push({name: 'Thread', params: {subName: this.listing.subName, threadID: this.listing.ID, url: this.listing.url}})
+                this.$router.push({name: 'Thread', params: {subName: this.listing.subName, threadID: this.listing.ID, url: this.listing.threadURL}})
             },
             goToSub () {
                 this.$router.push(`/r/${this.subName}`)
