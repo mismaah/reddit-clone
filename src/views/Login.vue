@@ -25,7 +25,7 @@
                 })
                     .then(() => {
                         if (localStorage.getItem('prevRoute') == 'Register') this.$router.go(-2)
-                        else this.$router.go(-1)
+                        else this.$router.back()
                     })
                     .catch(error => {
                         this.error = error
