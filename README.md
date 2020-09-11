@@ -1,29 +1,26 @@
 # reddit-clone
-
-## Project setup
+## Setup for development
+### Install node modules
 ```
 npm install
 ```
-
-### Compiles and hot-reloads for development
+### Compile and hot reload
 ```
 npm run serve
 ```
+### Create .env
+Create .env.development file in root directory. `VUE_APP_BASE_URL` is the base url for all api calls. [Backend](https://github.com/mismaah/reddit-clone-backend) runs on port 8000 by default.
+```
+VUE_APP_BASE_URL=http://localhost:8000
+```
 
-### Compiles and minifies for production
+## Setup for production
+### Create .env
+Create .env.production file in root directory.
+```
+VUE_APP_BASE_URL=http://localhost:80
+```
+### Compile and minify for production
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
