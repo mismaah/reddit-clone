@@ -141,8 +141,11 @@
                 else return false
             },
             shorterLink: function () {
-                if (this.listing.threadLink.length > 30) return this.listing.threadLink.substring(0, 27)+"..."
-                return this.listing.threadLink
+                let link = this.listing.threadLink
+                if (link.substring(0,12) == "https://www.") link = link.substring(12, link.length)
+                if (link.substring(0,8) == "https://") link = link.substring(8, link.length)
+                if (link.length > 30) return link.substring(0, 27)+"..."
+                return link
             }
         },
         mounted () {
