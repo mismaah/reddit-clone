@@ -4,6 +4,7 @@
             <span class="navleft plain">
                 <router-link to="/">HOME</router-link>
             </span>
+            <nav-search></nav-search>
             <span v-if="isLoggedIn" class="navright">
                 <a class="user" @click="goToUser()">{{username}}</a> - 
                 <a class="navBtn" @click="$router.push('/preferences')">PREFERENCES</a> - 
@@ -19,7 +20,11 @@
 </template>
 
 <script>
+    import NavSearch from './components/NavSearch.vue'
     export default {
+        components: {
+            NavSearch
+        },
         methods: {
             logout: function () {
                 this.$store.dispatch('logout')
@@ -63,6 +68,7 @@ body {
 }
 .navleft {
     padding-left: 10px;
+    display: flex;
 }
 .plain a, .plain a:hover, .plain a:focus, .plain a:active {
     text-decoration: none;

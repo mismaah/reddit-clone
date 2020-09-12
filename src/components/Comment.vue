@@ -4,19 +4,19 @@
             <i v-if="!collapsed" @click="collapse()" title="Hide child comments" class="material-icons collapseBtn">remove</i>
             <i v-else @click="collapse()" title="Show child comments" class="material-icons collapseBtn">add</i>
             <span class="user" @click="goToUser()">{{comment.username}} </span>
-            <span class="points"> {{points}} <span v-if="points == 1">point</span><span v-else>points</span></span>
+            <span class="points" v-if="!inSearch"> {{points}} <span v-if="points == 1">point</span><span v-else>points</span></span>
             <span class="points" :title="dateFromUnixTime(comment.createdOn)">{{timeAgo(comment.createdOn)}}</span>
             <p class="utilBtn" @click="permalink()">permalink</p>
         </div>
         <div v-show="!collapsed">
             <div class="contents">
-                <span v-if="this.$store.getters.isLoggedIn" class="voteArea">
+                <span v-if="this.$store.getters.isLoggedIn && !inSearch" class="voteArea">
                     <i @click="vote('up')" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
                     <i @click="vote('down')" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
                 </span>
                 <span class="textArea">
-                    <span class="body">{{comment.body}}</span>
-                    <i v-if="this.$store.getters.isLoggedIn" @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
+                    <span class="body" :style="`font-size: ${bodyFontSize}px;`">{{comment.body}}</span>
+                    <i v-if="this.$store.getters.isLoggedIn && !inSearch" @click="replyBtn()" title="Reply" class="material-icons replyBtn">reply</i>
                 </span>
             </div>
             
@@ -43,6 +43,7 @@
         props: {
             comment: Object,
             collapseAll: Boolean,
+            inSearch: Boolean
         },
         data: () => ({
             children: [],
@@ -52,7 +53,8 @@
             collapsed: false,
             totalChildCount: 0,
             voteState: null,
-            points: null
+            points: null,
+            bodyFontSize: 15,
         }),
         methods: {
             vote (type) {
@@ -197,6 +199,7 @@
             if (this.comment.children) this.children = this.comment.children
             this.points = this.comment.points
             this.voteState = this.comment.voteState
+            if (this.inSearch) this.bodyFontSize = 12
         },
         computed: {
             upArrowColor: function () {
@@ -247,7 +250,6 @@
     margin-left: 10px;
 }
 .body {
-    font-size: 15px;
     margin-top: 0px;
     margin-bottom: 0px;
 }

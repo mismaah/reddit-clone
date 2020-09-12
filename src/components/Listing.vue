@@ -1,12 +1,15 @@
 <template>
     <div class="top">
         <div class="contents">
-            <span class="voteArea">
+            <span class="voteArea" v-if="!inSearch">
                 <i v-if="this.$store.getters.isLoggedIn" @click="vote('up')" title="Upvote" class="material-icons voteArrow" :style="{color: upArrowColor}">keyboard_arrow_up</i>
                 <p class="points">{{points}}</p>
                 <i v-if="this.$store.getters.isLoggedIn" @click="vote('down')" title="Downvote" class="material-icons voteArrow" :style="{color: downArrowColor}">keyboard_arrow_down</i>
             </span>
-            <span class="imageArea" v-if="imageURL" title="click to expand" @click="expandImage = !expandImage">
+            <span class="imageArea" v-if="imageURL && inSearch" @click="goToThread(listing)">
+                <img class="thumbnail" :src="imageURL">
+            </span>
+            <span class="imageArea" v-if="imageURL && !inSearch" title="click to expand" @click="expandImage = !expandImage">
                 <img class="thumbnail" :src="imageURL">
             </span>
             <span class="textArea">
@@ -37,7 +40,8 @@
         name: 'Listing',
         props: {
             listing: Object,
-            parentSub: String
+            parentSub: String,
+            inSearch: Boolean
         },
         data: () => ({
             voteState: null,
