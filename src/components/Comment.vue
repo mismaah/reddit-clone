@@ -157,8 +157,10 @@
                 this.$router.push(`/u/${this.comment.username}`)
             },
             dateFromUnixTime(unixTime) {
-                let datetime = new Date(unixTime * 1000).toISOString()
-                return `${datetime.substring(0, 10)} ${datetime.substring(11, 19)}`
+                let moment = require('moment')
+                let datetime = new Date(unixTime * 1000)
+                let formattedDateTime = moment(datetime).format("LLL")
+                return formattedDateTime
             },
             timeAgo(unixTime) {
                 let now = (Date.now() / 1000).toFixed(0)
