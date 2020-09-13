@@ -8,7 +8,6 @@
             </router-link>
             
             <span v-if="isLoggedIn" class="navright">
-                
                 <a class="user" @click="goToUser()">{{username}}</a> - 
                 <a class="navBtn" @click="$router.push('/preferences')">PREFERENCES</a> - 
                 <a class="navBtn" @click="logout()">LOGOUT</a>
@@ -17,6 +16,7 @@
             <span v-else class="navright plain">
                 <router-link to="/login">LOGIN</router-link> - 
                 <router-link to="/register">REGISTER</router-link>
+                <nav-search></nav-search>
             </span>
         </div>
         <router-view :key="$route.fullPath" id="routerview"/>
@@ -141,5 +141,6 @@ body {
     color: red;
     font-size: 16px;
     line-height: 1px;
+    margin-top: -2px;
 }
 </style>
