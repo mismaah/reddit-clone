@@ -1,14 +1,18 @@
 <template>
     <div id="app">
         <div id="nav">
-            <span class="navleft plain">
-                <router-link to="/">HOME</router-link>
-            </span>
-            <nav-search></nav-search>
+            <router-link to="/" class="navleft plain">
+                <img class="navLogo" src="@/assets/logo.png" alt="">
+                <span class="name">{{name}}</span> - 
+                <span>HOME</span>
+            </router-link>
+            
             <span v-if="isLoggedIn" class="navright">
+                
                 <a class="user" @click="goToUser()">{{username}}</a> - 
                 <a class="navBtn" @click="$router.push('/preferences')">PREFERENCES</a> - 
                 <a class="navBtn" @click="logout()">LOGOUT</a>
+                <nav-search></nav-search>
             </span>
             <span v-else class="navright plain">
                 <router-link to="/login">LOGIN</router-link> - 
@@ -20,11 +24,15 @@
 </template>
 
 <script>
+    import {constants} from './constants.js'
     import NavSearch from './components/NavSearch.vue'
     export default {
         components: {
             NavSearch
         },
+        data: () => ({
+            name: constants.APP_NAME
+        }),
         methods: {
             logout: function () {
                 this.$store.dispatch('logout')
@@ -64,11 +72,17 @@ body {
     padding: 3px;
     font-weight: 500;
     display: flex;
+    height: 20px;
     justify-content: space-between;
+    align-items: center;
 }
 .navleft {
     padding-left: 10px;
     display: flex;
+    align-items: center;
+    white-space: pre;
+    text-decoration: none;
+    color: inherit;
 }
 .plain a, .plain a:hover, .plain a:focus, .plain a:active {
     text-decoration: none;
@@ -78,6 +92,7 @@ body {
     display: flex;
     padding-right: 10px;
     white-space: pre;
+    align-items: center;
 }
 .user {
     font-size: 11px;
@@ -117,5 +132,14 @@ body {
 }
 .navBtn {
     cursor: pointer;
+}
+.navLogo {
+    width: 25px;
+    height: 25px;
+}
+.name {
+    color: red;
+    font-size: 16px;
+    line-height: 1px;
 }
 </style>
