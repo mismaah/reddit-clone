@@ -18,7 +18,7 @@ VUE_APP_BASE_URL=http://localhost:8000
 ### Create .env
 Create .env.production file in root directory.
 ```
-VUE_APP_BASE_URL=http://localhost:80
+VUE_APP_BASE_URL={backend host}
 ```
 ### Compile and minify for production
 ```
