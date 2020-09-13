@@ -1,8 +1,10 @@
 <template>
     <div class="top">
-        <i v-if="!searching" class="material-icons searchBtn">search</i>
-        <i v-else class="material-icons searchBtnAnimated">search</i>
-        <input v-model="query" ref="search" @input="debouncedSearch()" type="text" placeholder="search" @focus.stop="expand();box=true" :style="`width: ${width}px;`" @blur="contract()" @keypress.esc="query=''">
+        <div class="searchDiv">
+            <i v-if="!searching" class="material-icons searchBtn">search</i>
+            <i v-else class="material-icons searchBtnAnimated">search</i>
+            <input v-model="query" ref="search" @input="debouncedSearch()" type="text" placeholder="search" @focus.stop="expand();box=true" :style="`width: ${width}px;`" @blur="contract()" @keypress.esc="query=''">
+        </div>
         <div class="results" v-if="box" @click="closeSearch()">
             <p class="searchHelp">
                 <span class="helpSection">
@@ -123,10 +125,13 @@
     margin-left: 10px;
     display: flex;
 }
+.searchDiv{
+    display: flex;
+    align-items: center;
+}
 .searchBtn {
     font-size: 17px;
     line-height: inherit;
-    margin-bottom: -5px;
 }
 .searchBtnAnimated {
     font-size: 17px;
