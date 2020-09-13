@@ -213,6 +213,7 @@
 }
 .listingTitle {
     cursor: pointer;
+    white-space: pre-wrap;
 }
 .subtitle {
     display: flex;

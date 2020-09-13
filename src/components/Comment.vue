@@ -252,6 +252,7 @@
 .body {
     margin-top: 0px;
     margin-bottom: 0px;
+    white-space: pre-wrap;
 }
 .replyBtn {
     -moz-transform: scale(-1, -1);

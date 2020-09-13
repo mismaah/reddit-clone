@@ -192,6 +192,7 @@
     padding-left: 20px;
     padding-right: 20px;
     text-align: left;
+    white-space: pre-wrap;
 }
 .header {
     display: flex;
