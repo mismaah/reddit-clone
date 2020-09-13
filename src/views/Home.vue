@@ -5,8 +5,7 @@
             <p class="headerBtn" v-if="this.$store.getters.isLoggedIn"><router-link to="/createsub">create sub</router-link></p>
         </span>
         <div class="divider"></div>
-        <p v-if="error">{{error}}</p>
-        <div v-else class="homeDiv">
+        <div class="homeDiv">
             <div class="listings">
                 <div class="sortBy">
                     sort by
@@ -22,6 +21,7 @@
                     <Listing v-for="listing in listings" :listing="listing" parentSub="home" :key="listing.ID"></Listing>
                 </div>
             </div>
+            <p v-if="error">{{error}}</p>
             <div class="subList">
                 <p class="subListHeader">All subs</p>
                 <span class="subName" v-for="sub in subs" :key="sub" @click="goToSub(sub)">r/{{sub}}</span>

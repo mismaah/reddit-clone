@@ -2,10 +2,9 @@
     <div>
         <span class="header">
             <p class="title">r/{{subName}}</p>
-            <p class="headerBtn" v-if="this.$store.getters.isLoggedIn && !error"><a @click="createThread()">create thread</a></p>
+            <p class="headerBtn" v-if="this.$store.getters.isLoggedIn"><a @click="createThread()">create thread</a></p>
         </span>
         <div class="divider"></div>
-        <p v-if="error">{{error}}</p>
         <div class="listings">
             <div class="sortBy">
                 sort by
@@ -21,6 +20,7 @@
                 <Listing v-for="listing in listings" :listing="listing" :parentSub="subName" :key="listing.ID"></Listing>
             </div>
         </div>
+        <p v-if="error">{{error}}</p>
     </div>
 </template>
 
