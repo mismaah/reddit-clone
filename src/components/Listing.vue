@@ -23,7 +23,7 @@
                     <span v-if="!inSub" class="subName" @click="goToSub(listing)">r/{{listing.subName}} </span>
                     <span :title="dateFromUnixTime(listing.createdOn)">{{timeAgo(listing.createdOn)}}</span>
                 </span>
-                <span class="commentCount" v-if="listing.commentCount">
+                <span class="commentCount" v-if="listing.commentCount" @click="goToThread(listing)">
                     {{listing.commentCount}} <span v-if="listing.commentCount==1">comment</span> <span v-else>comments</span>
                 </span>
             </span>
@@ -225,6 +225,7 @@
 .commentCount {
     font-size: 10px;
     font-weight: 500;
+    cursor: pointer;
 }
 .threadLink {
     font-size: 12px;
