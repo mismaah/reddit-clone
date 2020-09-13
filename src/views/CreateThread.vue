@@ -51,7 +51,6 @@
                 formData.append("threadType", this.threadType)
                 if (this.threadType == "link") formData.append("threadLink", this.threadLink)
                 if (this.threadType == "image") formData.append("file", this.file)
-                console.log(formData)
                 fetch(`${process.env.VUE_APP_BASE_URL}/api/createthread`, {
                     method: 'post',
                     body: formData
