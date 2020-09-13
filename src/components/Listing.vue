@@ -189,14 +189,15 @@
     margin: -5px;
 }
 .imageArea {
-    width: 80px;
-    max-height: 80px;
+    width: 70px;
+    max-height: 70px;
     margin-right: 10px;
     cursor: pointer;
 }
 .thumbnail {
     width: 100%;
     height: auto;
+    max-height: 70px;
 }
 .bigImageContainer {
     max-width: 90%;
