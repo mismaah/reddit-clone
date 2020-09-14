@@ -86,7 +86,6 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    localStorage.setItem('prevRoute', from.name)
     if (store.getters.isLoggedIn) {
         fetch(`${process.env.VUE_APP_BASE_URL}/api/validate`, {
             method: 'post',
@@ -108,6 +107,9 @@ router.beforeEach((to, from, next) => {
                     }
                 }
             })
+    }
+    if(from.name != "Login" && from.name != "Register") {
+        localStorage.setItem('prevRoute', from.fullPath)
     }
     if(to.name == "Login" || to.name == "Register") {
         if (store.getters.isLoggedIn) {
