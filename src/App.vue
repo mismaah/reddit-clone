@@ -6,7 +6,7 @@
                 <span class="name">{{name}}</span> - 
                 <span>HOME</span>
             </router-link>
-            
+            <span style="display: flex; white-space: pre;"> - <SubList></SubList></span>
             <span v-if="isLoggedIn" class="navright">
                 <a class="user" @click="goToUser()">{{username}}</a> - 
                 <a class="navBtn" @click="$router.push('/preferences')">PREFERENCES</a> - 
@@ -26,9 +26,11 @@
 <script>
     import {constants} from './constants.js'
     import NavSearch from './components/NavSearch.vue'
+    import SubList from './components/SubList.vue'
     export default {
         components: {
-            NavSearch
+            NavSearch,
+            SubList
         },
         data: () => ({
             name: constants.APP_NAME
@@ -73,7 +75,7 @@ body {
     font-weight: 500;
     display: flex;
     height: 20px;
-    justify-content: space-between;
+    justify-content:flex-start;
     align-items: center;
 }
 .navleft {
@@ -93,6 +95,7 @@ body {
     padding-right: 10px;
     white-space: pre;
     align-items: center;
+    margin-left: auto;
 }
 .user {
     font-size: 11px;

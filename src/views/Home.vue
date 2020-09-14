@@ -22,10 +22,6 @@
                 </div>
             </div>
             <p v-if="error">{{error}}</p>
-            <div class="subList">
-                <p class="subListHeader">All subs</p>
-                <span class="subName" v-for="sub in subs" :key="sub" @click="goToSub(sub)">r/{{sub}}</span>
-            </div>
         </div>
     </div>
 </template>
@@ -47,28 +43,6 @@
             }
         }),
         methods: {
-            getAllSubs () {
-                fetch(`${process.env.VUE_APP_BASE_URL}/api/home/`, {
-                    method: 'get',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                })
-                    .then(resp => {
-                        if (!resp.ok) {
-                            return resp.text()
-                                .then(error => {
-                                    this.error = error
-                                })
-                        } else {
-                            return resp.json()
-                                .then(result => {
-                                    this.subs = result
-                                })
-                        }
-                    })
-            },
             getAllThreads () {
                 let data = {
                     kind: "home",
@@ -98,9 +72,6 @@
                         }
                     })
             },
-            goToSub (subName) {
-                this.$router.push(`/r/${subName}`)
-            },
             getPreferences(){
                 if (localStorage.getItem('preferences') === null) return
                 this.preferences = JSON.parse(localStorage.getItem('preferences'))
@@ -108,7 +79,6 @@
         },
         mounted () {
             this.getPreferences()
-            this.getAllSubs()
             this.getAllThreads()
         },
     }
@@ -145,15 +115,6 @@ a, a:hover, a:focus, a:active {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-}
-.subList {
-    margin-right: 50px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
-    border-radius: 10px;
-    background-color: rgb(202, 202, 202);
 }
 .subListHeader {
     margin-top: 0px;
